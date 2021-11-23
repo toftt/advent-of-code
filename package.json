@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "callsite": "^1.0.0",
+    "commander": "^8.3.0",
+    "dotenv": "^10.0.0",
     "ts-node": "^10.4.0"
   }
 }
