@@ -4,9 +4,7 @@ const input = readInput();
 const ints = intify(input);
 const groups = group(ints, 3);
 
-const objects = groups.map((group) => {
-  return objectify(<const>["l", "w", "h"], group);
-});
+const objects = groups.map(objectify(<const>["l", "w", "h"]));
 
 export const part1 = () => {
   return objects.reduce((acc, { w, l, h }) => {
