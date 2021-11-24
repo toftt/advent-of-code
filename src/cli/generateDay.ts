@@ -3,7 +3,7 @@ import fs from "fs";
 
 import { paths } from "../paths";
 
-export const generateDay = (day: string, year: string) => {
+export const generateDay = (year: string, day: string) => {
   const yearFolder = path.join(paths.srcFolder, year);
   const exists = fs.existsSync(yearFolder);
 
@@ -32,4 +32,5 @@ export const part2 = () => {
 };`;
 
   fs.writeFileSync(path.join(dayFolder, "solution.ts"), text);
+  fs.writeFileSync(path.join(dayFolder, "input"), "");
 };

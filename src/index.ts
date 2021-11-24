@@ -16,6 +16,8 @@ program
   .description("Generate a solution file for day <day>.")
   .action((day) => {
     generateDay(year, day);
+    generateExports();
+    generateRunFile();
   });
 program
   .command("gen-run-file")
