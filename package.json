@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node"
+    "cmd": "ts-node ./src/index.ts"
   },
   "devDependencies": {
     "@types/callsite": "^1.0.31",

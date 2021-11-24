@@ -29,8 +29,3 @@ export const part2 = () => {
     return acc + wrap + bow;
   }, 0);
 };
-
-const ans1 = part1();
-const ans2 = part2();
-
-console.log({ ans1, ans2 });

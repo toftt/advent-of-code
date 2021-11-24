@@ -71,8 +71,3 @@ export const part2 = () => {
 
   return [...grid.entries()].length;
 };
-
-const ans1 = part1();
-const ans2 = part2();
-
-console.log({ ans1, ans2 });

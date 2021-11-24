@@ -2,21 +2,16 @@ import fs from "fs";
 import path from "path";
 import { paths } from "paths";
 import prettier from "prettier";
-
-const getSubDirNames = (dir: string) => {
-  return fs
-    .readdirSync(dir, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
-};
+import { getSubDirNames } from "./utils";
 
 const getDayCaseLine = (year: string, day: string) => {
   const dayNumber = day.slice(3);
 
   return `
 case "${dayNumber}": {
-	year${year}.${day}.part1();
-	year${year}.${day}.part2();
+	const part1 = year${year}.${day}.part1();
+	const part2 = year${year}.${day}.part2();
+  console.log({part1, part2});
 	break;
 };
 `;
@@ -55,7 +50,7 @@ case "${year}": {
   const result = `
 ${imports}
 
-export const run = (year: string, day: string) => {
+export const runSolution = (year: string, day: string) => {
 	switch (year) {
 		${statements}
 
