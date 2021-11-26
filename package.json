@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "cmd": "ts-node ./src/index.ts"
+    "cmd": "ts-node ./src/cli/pm.ts"
   },
   "devDependencies": {
     "@types/callsite": "^1.0.31",
@@ -20,6 +20,7 @@
     "callsite": "^1.0.0",
     "commander": "^8.3.0",
     "dotenv": "^10.0.0",
+    "handlebars": "^4.7.7",
     "prettier": "^2.4.1",
     "ts-node": "^10.4.0"
   }

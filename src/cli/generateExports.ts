@@ -1,8 +1,10 @@
 import path from "path";
 import fs from "fs";
+import handlebars from "handlebars";
 
 import { getSubDirNames } from "./utils";
 import { paths } from "../paths";
+import { format } from "prettier";
 
 export const generateExports = () => {
   const yearFolderNames = getSubDirNames(paths.srcFolder).filter((folderName) =>
@@ -13,17 +15,16 @@ export const generateExports = () => {
     const folderPath = path.join(paths.srcFolder, name);
     const dayFolders = getSubDirNames(folderPath);
 
-    const imports = dayFolders
-      .map((name) => `import * as ${name} from "./${name}/solution";`)
-      .join("\n");
+    const templateText = fs.readFileSync(
+      path.join(__dirname, "templates", "exportDays.hbs"),
+      "utf8"
+    );
 
-    const exports = dayFolders.map((name) => `export {${name}};`).join("\n");
+    const template = handlebars.compile(templateText);
+    const output = template({ days: dayFolders });
 
-    const result = `// This file is auto-generated -- do not modify.
-${imports}
+    const formatted = format(output, { parser: "typescript" });
 
-${exports}`;
-
-    fs.writeFileSync(path.join(folderPath, "index.ts"), result);
+    fs.writeFileSync(path.join(folderPath, "index.ts"), formatted);
   }
 };

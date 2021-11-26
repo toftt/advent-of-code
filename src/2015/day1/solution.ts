@@ -2,7 +2,7 @@ import { readInput } from "~utils";
 
 const input = readInput();
 
-export const part1 = () => {
+export const part1 = (): number => {
   const answer = input.split("").reduce((currentFloor, instruction) => {
     switch (instruction) {
       case "(":
@@ -17,7 +17,7 @@ export const part1 = () => {
   return answer;
 };
 
-export const part2 = () => {
+export const part2 = (): number => {
   let currentFloor = 0;
   let steps = 0;
 

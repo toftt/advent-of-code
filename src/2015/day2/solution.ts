@@ -6,7 +6,7 @@ const groups = group(ints, 3);
 
 const objects = groups.map(objectify(<const>["l", "w", "h"]));
 
-export const part1 = () => {
+export const part1 = (): number => {
   return objects.reduce((acc, { w, l, h }) => {
     const s1 = l * w;
     const s2 = w * h;
@@ -19,7 +19,7 @@ export const part1 = () => {
   }, 0);
 };
 
-export const part2 = () => {
+export const part2 = (): number => {
   return objects.reduce((acc, { w, l, h }) => {
     const mins = [w, l, h].sort((a, b) => b - a).slice(1);
 

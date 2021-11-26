@@ -1,7 +1,9 @@
 import path from "path";
 import fs from "fs";
+import handlebars from "handlebars";
 
 import { paths } from "../paths";
+import { format } from "prettier";
 
 export const generateDay = (year: string, day: string) => {
   const yearFolder = path.join(paths.srcFolder, year);
@@ -19,18 +21,15 @@ export const generateDay = (year: string, day: string) => {
 
   fs.mkdirSync(dayFolder);
 
-  const text = `import { readInput } from "~utils";
+  const templateText = fs.readFileSync(
+    path.join(__dirname, "templates", "solution.hbs"),
+    "utf8"
+  );
+  const template = handlebars.compile(templateText);
+  const output = template({});
 
-const input = readInput();
+  const formatted = format(output, { parser: "typescript" });
 
-export const part1 = () => {
-	//
-};
-
-export const part2 = () => {
-	//
-};`;
-
-  fs.writeFileSync(path.join(dayFolder, "solution.ts"), text);
+  fs.writeFileSync(path.join(dayFolder, "solution.ts"), formatted);
   fs.writeFileSync(path.join(dayFolder, "input"), "");
 };

@@ -1,0 +1,28 @@
+{{#each years}}
+import * as year{{year}} from "../{{year}}";
+{{/each}}
+
+export const runSolution = (year: string, day: string, part: string) => {
+  switch (year) {
+		{{#each years}}
+		case "{{year}}": {
+			switch (day) {
+				{{#each days}}
+					case "{{this}}": {
+						if (part === "1") console.log(year{{../year}}.day{{this}}.part1());
+						else console.log(year{{../year}}.day{{this}}.part2());
+						break;
+					}
+				{{/each}}
+				default: {
+					throw new Error(`Day ${day} does not exists.`);
+				}
+			}
+			break;
+		};
+		{{/each}}
+		default: {
+			throw new Error(`Year ${year} does not exists.`);
+		}
+  }
+};

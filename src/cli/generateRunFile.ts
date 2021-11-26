@@ -1,7 +1,8 @@
 import fs from "fs";
+import handlebars from "handlebars";
 import path from "path";
 import { paths } from "paths";
-import prettier from "prettier";
+import { format } from "prettier";
 import { getSubDirNames } from "./utils";
 
 const getDayCaseLine = (year: string, day: string) => {
@@ -28,39 +29,21 @@ export const generateRunFile = () => {
     return acc;
   }, {} as Record<string, string[]>);
 
-  const statements = Object.entries(structure)
-    .map(([year, days]) => {
-      return `
-case "${year}": {
-	switch(day) {
-		${days.map((day) => getDayCaseLine(year, day)).join("\n")}
-	}
-	break;
-}
-`;
-    })
-    .join("\n");
+  const data = yearFolderNames.map((name) => ({
+    year: name,
+    days: getSubDirNames(path.join(paths.srcFolder, name)).map((day) =>
+      day.slice(3)
+    ),
+  }));
 
-  const imports = yearFolderNames
-    .map((n) => {
-      return `import * as year${n} from "./${n}"`;
-    })
-    .join("\n");
+  const templateText = fs.readFileSync(
+    path.join(__dirname, "templates", "runFile.hbs"),
+    "utf8"
+  );
+  const template = handlebars.compile(templateText);
+  const output = template({ years: data });
 
-  const result = `
-${imports}
+  const formatted = format(output, { parser: "typescript" });
 
-export const runSolution = (year: string, day: string) => {
-	switch (year) {
-		${statements}
-
-	};
+  fs.writeFileSync(path.join(paths.srcFolder, "cli/run.ts"), formatted);
 };
-`;
-
-  const formatted = prettier.format(result, { parser: "typescript" });
-
-  fs.writeFileSync(path.join(paths.srcFolder, "run.ts"), formatted);
-};
-
-generateRunFile();

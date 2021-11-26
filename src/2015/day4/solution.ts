@@ -3,7 +3,7 @@ import { readInput } from "~utils";
 
 const input = readInput().trim();
 
-export const part1 = () => {
+export const part1 = (): number => {
   let current = 0;
 
   while (true) {
@@ -19,7 +19,7 @@ export const part1 = () => {
   return current;
 };
 
-export const part2 = () => {
+export const part2 = (): number => {
   let current = 0;
 
   while (true) {
