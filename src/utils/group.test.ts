@@ -1,4 +1,4 @@
-import { group } from ".";
+import { group } from "./group";
 
 describe("group", () => {
   it("groups", () => {

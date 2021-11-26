@@ -1,4 +1,4 @@
-import { Counter } from "~utils";
+import { Counter } from "~utils/Counter";
 
 type Direction = "left" | "right" | "down" | "up";
 

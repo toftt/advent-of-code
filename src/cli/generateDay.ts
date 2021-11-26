@@ -21,15 +21,26 @@ export const generateDay = (year: string, day: string) => {
 
   fs.mkdirSync(dayFolder);
 
-  const templateText = fs.readFileSync(
+  const solutiontemplateText = fs.readFileSync(
     path.join(__dirname, "templates", "solution.hbs"),
     "utf8"
   );
-  const template = handlebars.compile(templateText);
-  const output = template({});
 
-  const formatted = format(output, { parser: "typescript" });
+  const testtemplateText = fs.readFileSync(
+    path.join(__dirname, "templates", "solution.test.hbs"),
+    "utf8"
+  );
 
-  fs.writeFileSync(path.join(dayFolder, "solution.ts"), formatted);
+  const solutionTemplate = handlebars.compile(solutiontemplateText);
+  const testTemplate = handlebars.compile(testtemplateText);
+
+  const solutionOutput = solutionTemplate({});
+  const testOutput = testTemplate({ year, day });
+
+  const formattedSolution = format(solutionOutput, { parser: "typescript" });
+  const formattedTest = format(testOutput, { parser: "typescript" });
+
+  fs.writeFileSync(path.join(dayFolder, "solution.ts"), formattedSolution);
+  fs.writeFileSync(path.join(dayFolder, "solution.test.ts"), formattedTest);
   fs.writeFileSync(path.join(dayFolder, "input"), "");
 };
