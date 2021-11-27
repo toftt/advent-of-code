@@ -3,3 +3,7 @@ export const intify = (str: string): number[] => {
 
   return [...matches].map((match) => parseInt(match[0]));
 };
+
+export const lineify = (str: string): string[] => {
+  return str.split(/\r?\n/);
+};

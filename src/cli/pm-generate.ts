@@ -12,6 +12,7 @@ if (!year) {
 
 program
   .command("runfile")
+  .alias("r")
   .description("Generate run file and needed imports/exports.")
   .action(() => {
     generateExports();
@@ -19,7 +20,8 @@ program
   });
 
 program
-  .command("solution <day>")
+  .command("day <day>")
+  .alias("d")
   .description("Generate a solution file for day <day>.")
   .action((day) => {
     generateDay(year, day);

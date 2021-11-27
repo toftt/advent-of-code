@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "cmd": "ts-node ./src/cli/pm.ts",
+    "aoc": "ts-node ./src/cli/pm.ts",
     "test": "jest"
   },
   "devDependencies": {
