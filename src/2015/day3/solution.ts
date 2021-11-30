@@ -1,9 +1,9 @@
 import { readInput } from "~utils/file";
 import { GridActor, InfiniteGrid } from "~utils/Grid";
 
-const input = readInput();
+export const part1 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
 
-export const part1 = (): number => {
   const grid = new InfiniteGrid();
   const santa = new GridActor(grid, { x: 0, y: 0 });
 
@@ -36,7 +36,9 @@ export const part1 = (): number => {
   return [...grid.entries()].length;
 };
 
-export const part2 = (): number => {
+export const part2 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
+
   const grid = new InfiniteGrid();
   const santa = new GridActor(grid, { x: 0, y: 0 });
   const roboSanta = new GridActor(grid, { x: 0, y: 0 });

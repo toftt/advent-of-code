@@ -1,12 +1,12 @@
 import { group, intify, mult, objectify, readInput, sum } from "~utils";
 
-const input = readInput();
-const ints = intify(input);
-const groups = group(ints, 3);
+export const part1 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
+  const ints = intify(input);
+  const groups = group(ints, 3);
 
-const objects = groups.map(objectify(<const>["l", "w", "h"]));
+  const objects = groups.map(objectify(<const>["l", "w", "h"]));
 
-export const part1 = (): number => {
   return objects.reduce((acc, { w, l, h }) => {
     const s1 = l * w;
     const s2 = w * h;
@@ -19,7 +19,13 @@ export const part1 = (): number => {
   }, 0);
 };
 
-export const part2 = (): number => {
+export const part2 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
+  const ints = intify(input);
+  const groups = group(ints, 3);
+
+  const objects = groups.map(objectify(<const>["l", "w", "h"]));
+
   return objects.reduce((acc, { w, l, h }) => {
     const mins = [w, l, h].sort((a, b) => b - a).slice(1);
 

@@ -5,4 +5,10 @@ module.exports = {
   moduleNameMapper: {
     "^~utils(.*)$": "<rootDir>/src/utils/$1",
   },
+  extraGlobals: ["Math"],
+  globals: {
+    "ts-jest": {
+      isolatedModules: true,
+    },
+  },
 };

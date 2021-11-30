@@ -1,9 +1,9 @@
 import crypto from "crypto";
 import { readInput } from "~utils";
 
-const input = readInput().trim();
+export const part1 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
 
-export const part1 = (): number => {
   let current = 0;
 
   while (true) {
@@ -19,7 +19,9 @@ export const part1 = (): number => {
   return current;
 };
 
-export const part2 = (): number => {
+export const part2 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
+
   let current = 0;
 
   while (true) {

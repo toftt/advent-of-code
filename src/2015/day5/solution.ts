@@ -1,8 +1,5 @@
 import { lineify, readInput } from "~utils";
 
-const input = readInput();
-const lines = lineify(input);
-
 const threeVowels = (s: string): boolean => {
   const vowels = "aeiou".split("");
 
@@ -19,14 +16,20 @@ const doesNotContain = (s: string): boolean => {
   return disallowed.every((d) => !s.includes(d));
 };
 
-export const part1 = (): number => {
+export const part1 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
+  const lines = lineify(input);
+
   const isNice = (s: string) =>
     [threeVowels, twiceInARow, doesNotContain].every((fn) => fn(s));
 
   return lines.filter(isNice).length;
 };
 
-export const part2 = (): number => {
+export const part2 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
+  const lines = lineify(input);
+
   const rule1 = (s: string) => /((.)(.)).*\1/.test(s);
   const rule2 = (s: string) => /(\w).\1/.test(s);
 

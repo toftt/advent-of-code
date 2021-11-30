@@ -2,15 +2,15 @@
 import * as year{{year}} from "../{{year}}";
 {{/each}}
 
-export const runSolution = (year: string, day: string, part: string) => {
+export const runSolution = (year: string, day: string, part: string, useTestData: boolean = false) => {
   switch (year) {
 		{{#each years}}
 		case "{{year}}": {
 			switch (day) {
 				{{#each days}}
 					case "{{this}}": {
-						if (part === "1") console.log(year{{../year}}.day{{this}}.part1());
-						else console.log(year{{../year}}.day{{this}}.part2());
+						if (part === "1") console.log(year{{../year}}.day{{this}}.part1(useTestData));
+						else console.log(year{{../year}}.day{{this}}.part2(useTestData));
 						break;
 					}
 				{{/each}}

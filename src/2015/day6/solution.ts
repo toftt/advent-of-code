@@ -1,10 +1,5 @@
 import { intify, lineify, objectify, readInput } from "~utils";
 
-const input = readInput();
-const lines = lineify(input);
-
-type Action = "on" | "off" | "toggle";
-
 const isWithin = (
   tx: number,
   ty: number,
@@ -21,7 +16,10 @@ const isWithin = (
   );
 };
 
-export const part1 = (): number => {
+export const part1 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
+  const lines = lineify(input);
+
   const actions = lines.map(intify).map(objectify(["x1", "y1", "x2", "y2"]));
 
   let count = 0;
@@ -48,7 +46,10 @@ export const part1 = (): number => {
   return count;
 };
 
-export const part2 = (): number => {
+export const part2 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
+  const lines = lineify(input);
+
   const actions = lines.map(intify).map(objectify(["x1", "y1", "x2", "y2"]));
 
   let totalBrightness = 0;

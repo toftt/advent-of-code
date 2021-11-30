@@ -1,8 +1,8 @@
 import { readInput } from "~utils";
 
-const input = readInput();
+export const part1 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
 
-export const part1 = (): number => {
   const answer = input.split("").reduce((currentFloor, instruction) => {
     switch (instruction) {
       case "(":
@@ -17,7 +17,9 @@ export const part1 = (): number => {
   return answer;
 };
 
-export const part2 = (): number => {
+export const part2 = (useTestData: boolean = false): number => {
+  const input = readInput(useTestData);
+
   let currentFloor = 0;
   let steps = 0;
 

@@ -43,4 +43,5 @@ export const generateDay = (year: string, day: string) => {
   fs.writeFileSync(path.join(dayFolder, "solution.ts"), formattedSolution);
   fs.writeFileSync(path.join(dayFolder, "solution.test.ts"), formattedTest);
   fs.writeFileSync(path.join(dayFolder, "input"), "");
+  fs.writeFileSync(path.join(dayFolder, "test"), "");
 };
