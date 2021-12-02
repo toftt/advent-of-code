@@ -28,8 +28,8 @@ export function sub(a: number, b?: number) {
   return (num: number) => sub(num, a);
 }
 
-export const combinations = <T>(elements: T[], depth: number): T[][] => {
-  if (depth === 1) {
+export const combinations = <T>(elements: T[], size: number): T[][] => {
+  if (size === 1) {
     return elements.map((x) => [x]);
   }
 
@@ -39,7 +39,7 @@ export const combinations = <T>(elements: T[], depth: number): T[][] => {
   let rest = elements.slice(1);
 
   while (rest.length) {
-    combinations(rest, depth - 1).forEach((y) => {
+    combinations(rest, size - 1).forEach((y) => {
       result.push([current, ...y]);
     });
 
@@ -47,5 +47,35 @@ export const combinations = <T>(elements: T[], depth: number): T[][] => {
     rest = rest.slice(1);
   }
 
+  return result;
+};
+
+export const oneFromEach = <T>(...collections: T[][]) => {
+  if (collections.length < 2) throw Error("you need at least two arguments");
+
+  let result: T[][] = collections.shift()!.map((x) => [x]);
+
+  collections.forEach((collection) => {
+    const tmp: T[][] = [];
+
+    result.forEach((combination) => {
+      collection.forEach((element) => {
+        tmp.push([...combination, element]);
+      });
+    });
+    result = tmp;
+  });
+
+  return result;
+};
+
+export const allCombinations = <T>(elements: T[], maxSize: number) => {
+  const result: T[][] = [];
+  for (let i = 1; i <= maxSize; i++) {
+    result.push(...combinations(elements, i));
+  }
+
+  // empty set
+  result.push([]);
   return result;
 };
