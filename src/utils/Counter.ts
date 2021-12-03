@@ -16,4 +16,34 @@ export class Counter<T> extends Map<T, number> {
       this.set(element, 1);
     }
   }
+
+  public mostCommon(): [T, number] {
+    const entries = [...this.entries()];
+    if (entries.length === 0) throw new Error("no entries");
+
+    let [mostCommon, maxOccurences] = entries[0];
+
+    for (const [element, numOccurences] of entries.slice(1)) {
+      if (numOccurences > maxOccurences) {
+        [mostCommon, maxOccurences] = [element, numOccurences];
+      }
+    }
+
+    return [mostCommon, maxOccurences];
+  }
+
+  public leastCommon(): [T, number] {
+    const entries = [...this.entries()];
+    if (entries.length === 0) throw new Error("no entries");
+
+    let [leastCommon, minOccurences] = entries[0];
+
+    for (const [element, numOccurences] of entries.slice(1)) {
+      if (numOccurences < minOccurences) {
+        [leastCommon, minOccurences] = [element, numOccurences];
+      }
+    }
+
+    return [leastCommon, minOccurences];
+  }
 }
