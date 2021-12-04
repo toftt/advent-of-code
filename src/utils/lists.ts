@@ -12,3 +12,13 @@ export const zip = <T>(...arrays: T[][]): T[][] => {
 
   return result;
 };
+
+export const findIndex = <T>(arr: T[][], el: T): [number, number] | null => {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr[i].length; j++) {
+      if (arr[i][j] === el) return [i, j];
+    }
+  }
+
+  return null;
+};

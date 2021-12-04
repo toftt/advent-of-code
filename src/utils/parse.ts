@@ -16,6 +16,13 @@ export const lineify = (str: string): string[] => {
 };
 
 /**
+ * Splits a string on double line breaks.
+ */
+export const sections = (str: string): string[] => {
+  return str.split(/\r?\n\r?\n/);
+};
+
+/**
  * Shortcut for `.map(s => parseInt(s))`
  */
 export const parseInts = (strArr: string[]): number[] => {
