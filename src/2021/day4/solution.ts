@@ -2,18 +2,17 @@ import {
   sum,
   lineify,
   readInput,
-  zip,
   parseInts,
   sections,
   findIndex,
+  transpose,
 } from "~utils";
 
 type Board = string[][];
 
 const hasBingo = (board: Board) => {
-  return (
-    board.some((row) => row.every((num) => num === "#")) ||
-    zip(...board).some((col) => col.every((num) => num === "#"))
+  return [...board, ...transpose(board)].some((rc) =>
+    rc.every((num) => num === "#")
   );
 };
 

@@ -13,6 +13,10 @@ export const zip = <T>(...arrays: T[][]): T[][] => {
   return result;
 };
 
+export const transpose = <T>(matrix: T[][]): T[][] => {
+  return zip(...matrix);
+};
+
 export const findIndex = <T>(arr: T[][], el: T): [number, number] | null => {
   for (let i = 0; i < arr.length; i++) {
     for (let j = 0; j < arr[i].length; j++) {
