@@ -4,11 +4,16 @@ import { Command } from "commander";
 import axios from "axios";
 import { paths } from "paths";
 
-const year = process.env.YEAR;
+const envYear = process.env.YEAR;
 const sessionCookie = process.env.SESSION_COOKIE;
 
 const program = new Command();
+
+program.option("-y, --year <year>");
+
 program.parse(process.argv);
+
+const year = program.opts().year ?? envYear;
 
 const [day] = program.args;
 
