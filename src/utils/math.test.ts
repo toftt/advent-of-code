@@ -1,4 +1,60 @@
-import { allCombinations, combinations, oneFromEach } from ".";
+import { add, allCombinations, combinations, median, oneFromEach } from ".";
+
+describe("add", () => {
+  it("adds (1)", () => {
+    const arr = [1, 2, 3, 4];
+    expect(arr.reduce(add, 0)).toEqual(10);
+  });
+
+  it("adds (2)", () => {
+    const arr = [0, 1, 2, 3, 4];
+    expect(arr.reduce(add, 0)).toEqual(10);
+  });
+
+  it("adds (3)", () => {
+    const arr = [0, 1, 2, 3, 4];
+    expect(arr.map(add(2))).toEqual([2, 3, 4, 5, 6]);
+  });
+});
+
+describe("median", () => {
+  it("calculates median (odd no of elems)", () => {
+    expect(median([1, 2, 3])).toEqual(2);
+    expect(median([-30, 3, 30])).toEqual(3);
+    expect(median([-1, -30, 3, 30, 4])).toEqual(3);
+  });
+
+  it("calculates median (even no of elems)", () => {
+    expect(median([1, 2, 3, 4])).toEqual(2.5);
+    expect(median([-30, 3, 30, 40])).toEqual(16.5);
+    expect(median([-1, 3, 3, 30])).toEqual(3);
+  });
+
+  it("calculates median (custom accessor)", () => {
+    expect(
+      median(
+        [
+          { a: "a", val: 1 },
+          { a: "b", val: 2 },
+          { a: "c", val: 3 },
+        ],
+        (a) => a.val
+      )
+    ).toEqual(2);
+
+    expect(
+      median(
+        [
+          { a: "a", val: 1 },
+          { a: "b", val: 2 },
+          { a: "c", val: 3 },
+          { a: "d", val: 4 },
+        ],
+        (a) => a.val
+      )
+    ).toEqual(2.5);
+  });
+});
 
 describe("combine", () => {
   it("combines", () => {

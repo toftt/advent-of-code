@@ -10,22 +10,41 @@ export const sum = (iterable: Iterable<number>) => {
 export function add(a: number): (a: number) => number;
 export function add(a: number, b: number): number;
 export function add(a: number, b?: number) {
-  if (b) return a + b;
+  if (b !== undefined) return a + b;
   return (num: number) => add(num, a);
 }
 
 export function mult(a: number): (a: number) => number;
 export function mult(a: number, b: number): number;
 export function mult(a: number, b?: number) {
-  if (b) return a * b;
+  if (b !== undefined) return a * b;
   return (num: number) => mult(num, a);
 }
 
 export function sub(a: number): (a: number) => number;
 export function sub(a: number, b: number): number;
 export function sub(a: number, b?: number) {
-  if (b) return a - b;
+  if (b !== undefined) return a - b;
   return (num: number) => sub(num, a);
+}
+
+export function median(elements: number[]): number;
+export function median<T>(elements: T[], accessor: (el: T) => number): number;
+export function median<T>(elements: any[], accessor?: any) {
+  if (elements.length === 0) return 0;
+
+  let tmp = [...elements];
+  if (typeof elements[0] === "number") tmp.sort((a, b) => a - b);
+  else {
+    tmp.sort((a, b) => accessor(a) - accessor(b));
+    tmp = tmp.map(accessor);
+  }
+
+  const halfwayPoint = Math.floor(tmp.length / 2);
+
+  return tmp.length % 2 === 0
+    ? (tmp[halfwayPoint - 1] + tmp[halfwayPoint]) / 2
+    : tmp[halfwayPoint];
 }
 
 export const combinations = <T>(elements: T[], size: number): T[][] => {
