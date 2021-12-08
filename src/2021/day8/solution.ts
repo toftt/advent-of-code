@@ -43,33 +43,6 @@ const isCorrect = (puts: string[], mapping: Record<string, string>) => {
   return mapped.every((mapped) => CASES.includes(mapped));
 };
 
-const findSetting = (
-  acc: Record<string, string>,
-  a: string[],
-  b: string[]
-): Record<string, string>[] => {
-  if (a.length === 0) return [acc];
-
-  const options: Record<string, string>[] = [];
-
-  for (let i = 0; i < a.length; i++) {
-    for (let j = 0; j < b.length; j++) {
-      const tmp = { ...acc };
-      tmp[a[i]] = b[j];
-
-      const newA = [...a];
-      const newB = [...b];
-
-      newA.splice(i, 1);
-      newB.splice(j, 1);
-
-      options.push(...findSetting(tmp, newA, newB));
-    }
-  }
-
-  return options;
-};
-
 export const part2 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
   const lines = lineify(input);
