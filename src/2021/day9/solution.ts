@@ -104,9 +104,8 @@ export const part2 = (useTestData: boolean = false): number => {
     }
     sizes.push(size);
   }
-  console.log(sizes.sort((a, b) => b - a));
-  console.log(sum(sizes));
-  console.log(points.filter((x) => !hasSeen(x) && x.val !== 9));
+
+  sizes.sort((a, b) => b - a);
 
   return sizes[0] * sizes[1] * sizes[2];
 };
@@ -170,7 +169,6 @@ export const part3 = (useTestData: boolean = false): number => {
     for (const point of seen) {
       addSeenMax(point, size, groupId.toFixed(5));
     }
-    if ([100, 92, 86].includes(size)) console.log(seen);
 
     sizes.push(size);
   }
@@ -183,9 +181,6 @@ export const part3 = (useTestData: boolean = false): number => {
   }, {} as any);
 
   const ff: any[] = Object.values(result).sort((a: any, b: any) => b - a);
-
-  // console.log(result);
-  console.log(ff);
 
   // solution here
   return ff[0] * ff[1] * ff[2];
