@@ -1,10 +1,17 @@
-import { lineify, readInput, SparseGrid, sum } from "~utils";
+import {
+  mult,
+  Position,
+  readInput,
+  SparseGrid,
+  StringifiedSet,
+  sum,
+} from "~utils";
 
 const getLowPoints = (grid: SparseGrid<number>) => {
-  const lowPoints: number[] = [];
+  const lowPoints: [Position, number][] = [];
   grid.entries().forEach(([k, v]) => {
     if (grid.adjecent(k).every((adjPos) => grid.get(adjPos)! > v)) {
-      lowPoints.push(v);
+      lowPoints.push([k, v]);
     }
   });
   return lowPoints;
@@ -14,65 +21,36 @@ export const part1 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
   const grid = SparseGrid.fromString(input);
 
-  return sum(getLowPoints(grid).map((x) => x + 1));
+  return sum(getLowPoints(grid).map(([_k, v]) => v + 1));
 };
 
-interface Point {
-  x: number;
-  y: number;
-  val: number;
-}
 export const part2 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
-  const lines = lineify(input).map((x) => x.split("").map((x) => parseInt(x)));
+  const grid = SparseGrid.fromString(input);
 
-  const points: Point[] = [];
-  for (let i = 0; i < lines.length; i++) {
-    for (let j = 0; j < lines[0].length; j++) {
-      points.push({ x: i, y: j, val: lines[i][j] });
+  const lowPoints = getLowPoints(grid).map(([pos]) => pos);
+  const basinSizes: number[] = [];
+
+  const seen = new StringifiedSet();
+  for (const lowPoint of lowPoints) {
+    let basinSize = 0;
+    const queue = [lowPoint];
+
+    while (queue.length !== 0) {
+      const pos = queue.pop()!;
+      const value = grid.get(pos!)!;
+
+      if (seen.has(pos) || value >= 9) continue;
+
+      seen.add(pos);
+      basinSize++;
+
+      queue.push(...grid.adjecent(pos, { bounded: true }));
     }
+    basinSizes.push(basinSize);
   }
 
-  points.sort((a, b) => a.val - b.val);
-  const seen = new Set<string>();
-  const addSeen = (p: Point) => seen.add(`x${p.x}y${p.y}`);
-  const hasSeen = (p: Point) => seen.has(`x${p.x}y${p.y}`);
+  basinSizes.sort((a, b) => b - a);
 
-  const sizes: number[] = [];
-
-  for (const p of points) {
-    if (hasSeen(p)) continue;
-    if (p.val === 9) continue;
-
-    const q = [p];
-
-    let size = 0;
-    while (q.length !== 0) {
-      const current = q.pop()!;
-
-      if (hasSeen(current)) continue;
-      if (current.val === 9) continue;
-
-      addSeen(current);
-
-      const surrounding: Point[] = [
-        [current.x + 1, current.y],
-        [current.x - 1, current.y],
-        [current.x, current.y + 1],
-        [current.x, current.y - 1],
-      ].map((p) => {
-        return { x: p[0], y: p[1], val: lines[p[0]]?.[p[1]] ?? 9 };
-      });
-
-      size += 1;
-
-      // const adj = surrounding.filter((s) => s.val === current.val + 1);
-      q.push(...surrounding);
-    }
-    sizes.push(size);
-  }
-
-  sizes.sort((a, b) => b - a);
-
-  return sizes[0] * sizes[1] * sizes[2];
+  return basinSizes.slice(0, 3).reduce(mult, 1);
 };

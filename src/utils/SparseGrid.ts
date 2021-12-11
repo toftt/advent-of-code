@@ -10,6 +10,35 @@ export interface Position {
   y: number;
 }
 
+export class StringifiedSet<T> {
+  private readonly set: Set<string>;
+
+  constructor() {
+    this.set = new Set();
+  }
+
+  add(value: T) {
+    this.set.add(JSON.stringify(value));
+    return this;
+  }
+
+  clear() {
+    this.set.clear();
+  }
+
+  delete(value: T) {
+    return this.set.delete(JSON.stringify(value));
+  }
+
+  has(value: T) {
+    return this.set.has(JSON.stringify(value));
+  }
+
+  get size() {
+    return this.set.size;
+  }
+}
+
 export class SparseGrid<T> {
   private readonly map: Map<string, T> = new Map();
   public readonly bounds: { x: Bound; y: Bound } = {
@@ -29,7 +58,7 @@ export class SparseGrid<T> {
   public adjecent(
     position: Position,
     {
-      includeDiagonals = true,
+      includeDiagonals = false,
       bounded = true,
     }: { includeDiagonals?: boolean; bounded?: boolean } = {}
   ): Position[] {
