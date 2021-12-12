@@ -8,11 +8,7 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
 
-      "args": [
-        "${workspaceFolder}\\src\\2015\\day3\\solution.ts",
-        "--example",
-        "hello"
-      ],
+      "args": ["${workspaceFolder}", "", "hello"],
 
       "cwd": "${workspaceRoot}",
       "internalConsoleOptions": "openOnSessionStart",
