@@ -71,15 +71,5 @@ export const part2 = (useTestData: boolean = false): number | string => {
     }
   }
 
-  const rows: string[] = [];
-  for (let y = 0; y < 6; y++) {
-    const row: string[] = [];
-    for (let x = 0; x <= 38; x++) {
-      const k = grid.get({ x, y });
-      row.push(k ?? ".");
-    }
-    rows.push(row.join(""));
-  }
-
-  return rows.join("\n");
+  return grid.toString();
 };

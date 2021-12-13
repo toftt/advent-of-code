@@ -60,7 +60,12 @@ export class SparseGrid<T> {
     {
       includeDiagonals = false,
       bounded = true,
-    }: { includeDiagonals?: boolean; bounded?: boolean } = {}
+    }: {
+      /** Whether to include diagonal neighbors. */
+      includeDiagonals?: boolean;
+      /** If true, will not return positions that are outside the current "bounds" of the grid. */
+      bounded?: boolean;
+    } = {}
   ): Position[] {
     const { x, y } = position;
     const adjecentPositions = [
@@ -111,7 +116,7 @@ export class SparseGrid<T> {
 
     for (let i = 0; i < elements.length; i++) {
       for (let j = 0; j < elements[i].length; j++) {
-        grid.set({ x: i, y: j }, elements[i][j]);
+        grid.set({ x: j, y: i }, elements[i][j]);
       }
     }
 
@@ -126,7 +131,7 @@ export class SparseGrid<T> {
 
     for (let i = 0; i < elements.length; i++) {
       for (let j = 0; j < elements[i].length; j++) {
-        grid.set({ x: i, y: j }, elements[i][j]);
+        grid.set({ x: j, y: i }, elements[i][j]);
       }
     }
 
@@ -172,5 +177,41 @@ export class SparseGrid<T> {
     this.entries().forEach(([k, v]) => {
       this.set(k, updateFn(v));
     });
+  }
+
+  recalculateBounds() {
+    this.bounds.x.min = Infinity;
+    this.bounds.y.min = Infinity;
+    this.bounds.x.max = -Infinity;
+    this.bounds.y.max = -Infinity;
+
+    this.keys().forEach((position) => {
+      if (position.x > this.bounds.x.max) this.bounds.x.max = position.x;
+      if (position.x < this.bounds.x.min) this.bounds.x.min = position.x;
+      if (position.y > this.bounds.y.max) this.bounds.y.max = position.y;
+      if (position.y < this.bounds.y.min) this.bounds.y.min = position.y;
+    });
+  }
+
+  toString(): string {
+    this.recalculateBounds();
+
+    const rows: string[] = [];
+    for (let y = this.bounds.y.min; y <= this.bounds.y.max; y++) {
+      const row: string[] = [];
+
+      for (let x = this.bounds.x.min; x <= this.bounds.x.max; x++) {
+        const value = this.get({ y, x });
+
+        row.push(value !== undefined ? `${value}` : ".");
+      }
+      rows.push(row.join(""));
+    }
+
+    return rows.join("\n");
+  }
+
+  print(): void {
+    console.log(this.toString());
   }
 }
