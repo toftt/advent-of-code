@@ -150,6 +150,10 @@ export class SparseGrid<T> {
     return this.map.has(SparseGrid.positionToString(position));
   }
 
+  delete(position: Position) {
+    return this.map.delete(SparseGrid.positionToString(position));
+  }
+
   keys() {
     return [...this.map.keys()].map(SparseGrid.stringToPosition);
   }
