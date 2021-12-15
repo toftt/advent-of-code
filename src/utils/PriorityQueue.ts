@@ -12,6 +12,32 @@ export class PriorityQueue<T> {
     }
   }
 
+  private upHeap(fromIndex: number) {
+    let currentIndex = fromIndex;
+
+    while (currentIndex !== 0) {
+      const parentIndex = Math.floor((currentIndex - 1) / 2);
+
+      const parentEl = this.elements[parentIndex];
+      const currentEl = this.elements[currentIndex];
+
+      if (this.takesPriority(currentEl, parentEl)) {
+        this.elements[currentIndex] = parentEl;
+        this.elements[parentIndex] = currentEl;
+      }
+
+      currentIndex = parentIndex;
+    }
+  }
+
+  public increasePriority(equals: (el: T) => boolean, replacement: T) {
+    const index = this.elements.findIndex(equals);
+    if (index === -1) throw new Error("couldnt find elem");
+
+    this.elements[index] = replacement;
+    this.upHeap(index);
+  }
+
   public push(element: T) {
     const insertionIndex = this.elements.length;
     this.elements.push(element);

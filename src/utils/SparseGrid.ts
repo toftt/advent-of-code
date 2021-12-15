@@ -17,6 +17,16 @@ export class StringifiedSet<T> {
     this.set = new Set();
   }
 
+  clone() {
+    const newSet = new StringifiedSet<T>();
+
+    for (const val of this.set.keys()) {
+      newSet.set.add(val);
+    }
+
+    return newSet;
+  }
+
   add(value: T) {
     this.set.add(JSON.stringify(value));
     return this;
