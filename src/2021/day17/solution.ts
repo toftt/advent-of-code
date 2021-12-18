@@ -15,21 +15,20 @@ const fallsInThing = (initialY: number, yMin: number, yMax: number) => {
 
 export const part1 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
-  const [, x1, x2, y1, y2] = input
+  const [, _x1, _x2, y1, y2] = input
     .match(/target area: x=(-?\d+)..(-?\d+), y=(-?\d+)..(-?\d+)/)!
     .map((x) => parseInt(x));
 
-  console.log({ x1, x2, y1, y2 });
   const yMin = Math.min(y1, y2);
   const yMax = Math.max(y1, y2);
 
-  for (let i = 0; i < 1_000_000; i++) {
+  let max = -Infinity;
+  for (let i = 0; i < 10_000; i++) {
     const m = fallsInThing(i, yMin, yMax);
-    if (m) console.log(m);
+    if (m) max = Math.max(m, max);
   }
 
-  // solution here
-  return -1;
+  return max;
 };
 
 const fallsInThing2 = (
@@ -56,18 +55,6 @@ const fallsInThing2 = (
 
   if (yPos >= yMin && xPos <= xMax) return true;
   return false;
-
-  // const maxHeight = (initialY * (initialY + 1)) / 2;
-  // const maxX = xMax;
-
-  // let steps = 0;
-  // while (true) {
-  //   if (maxHeight - (steps * (steps + 1)) / 2 <= yMax) break;
-  //   steps++;
-  // }
-
-  // if (maxHeight - (steps * (steps + 1)) / 2 >= yMin) return maxHeight;
-  // return undefined;
 };
 
 export const part2 = (useTestData: boolean = false): number => {
@@ -76,7 +63,6 @@ export const part2 = (useTestData: boolean = false): number => {
     .match(/target area: x=(-?\d+)..(-?\d+), y=(-?\d+)..(-?\d+)/)!
     .map((x) => parseInt(x));
 
-  console.log({ x1, x2, y1, y2 });
   const yMin = Math.min(y1, y2);
   const yMax = Math.max(y1, y2);
   const xMin = Math.min(x1, x2);
@@ -92,8 +78,5 @@ export const part2 = (useTestData: boolean = false): number => {
     }
   }
 
-  console.log(count);
-
-  // solution here
-  return -1;
+  return count;
 };
