@@ -44,6 +44,10 @@ export class StringifiedSet<T> {
     return this.set.has(JSON.stringify(value));
   }
 
+  keys(): T[] {
+    return [...this.set.keys()].map((k) => JSON.parse(k));
+  }
+
   get size() {
     return this.set.size;
   }

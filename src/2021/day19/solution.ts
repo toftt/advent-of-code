@@ -69,32 +69,174 @@ const allRotations = (pArr: Position3D[]) => {
     pArr.map((p) => rotateY(p)),
     pArr.map((p) => rotateZ(p)),
 
-    pArr.map((p) => rotateX(rotateX(p))),
-    pArr.map((p) => rotateY(rotateX(p))),
-    pArr.map((p) => rotateZ(rotateX(p))),
-    pArr.map((p) => rotateX(rotateY(p))),
+    pArr.map((p) => rotateX(rotateX(p))), // XX,
+    pArr.map((p) => rotateY(rotateX(p))), // XY
+    pArr.map((p) => rotateZ(rotateX(p))), // XZ
+    pArr.map((p) => rotateX(rotateY(p))), // YX
 
-    pArr.map((p) => rotateY(rotateY(p))),
-    pArr.map((p) => rotateY(rotateZ(p))),
-    pArr.map((p) => rotateZ(rotateZ(p))), // 11
+    pArr.map((p) => rotateY(rotateY(p))), // YY
+    pArr.map((p) => rotateY(rotateZ(p))), // ZY
+    pArr.map((p) => rotateZ(rotateZ(p))), // ZZ
 
-    pArr.map((p) => rotateX(p), Math.PI + Math.PI / 2),
-    pArr.map((p) => rotateY(rotateX(p), Math.PI)), // XXY
-    pArr.map((p) => rotateZ(rotateX(p), Math.PI)), // XXZ
+    pArr.map((p) => rotateX(p, Math.PI + Math.PI / 2)), // XXX
+    pArr.map((p) => rotateY(rotateX(p, Math.PI))), // XXY
+    pArr.map((p) => rotateZ(rotateX(p, Math.PI))), // XXZ
     pArr.map((p) => rotateX(rotateY(rotateX(p)))), // 15 - XYX
 
-    pArr.map((p) => rotateY(rotateX(p)), Math.PI), // 16 - XYY
-    pArr.map((p) => rotateZ(rotateX(p)), Math.PI), // 17 - XZZ
-    pArr.map((p) => rotateX(rotateY(p)), Math.PI), // 18 - YXX
+    pArr.map((p) => rotateY(rotateX(p), Math.PI)), // 16 - XYY
+    pArr.map((p) => rotateZ(rotateX(p), Math.PI)), // 17 - XZZ
+    pArr.map((p) => rotateX(rotateY(p), Math.PI)), // 18 - YXX
 
-    pArr.map((p) => rotateY(p), Math.PI + Math.PI / 2),
-    pArr.map((p) => rotateZ(p), Math.PI + Math.PI / 2),
+    pArr.map((p) => rotateY(p, Math.PI + Math.PI / 2)),
+    pArr.map((p) => rotateZ(p, Math.PI + Math.PI / 2)),
 
-    pArr.map((p) => rotateY(rotateX(p), Math.PI + Math.PI / 2)),
-    pArr.map((p) => rotateX(rotateY(rotateX(p), Math.PI / 2))),
-    pArr.map((p) => rotateX(rotateY(rotateX(p))), Math.PI / 2),
-    pArr.map((p) => rotateY(rotateX(p)), Math.PI + Math.PI / 2), // 24 - XYYY
+    pArr.map((p) => rotateY(rotateX(p, Math.PI + Math.PI / 2))), // XXXY
+    pArr.map((p) => rotateX(rotateY(rotateX(p, Math.PI / 2)))), // XXYX
+    pArr.map((p) => rotateX(rotateY(rotateX(p)), Math.PI / 2)), // XYXX
+    pArr.map((p) => rotateY(rotateX(p), Math.PI + Math.PI / 2)), // 24 - XYYY
   ];
+};
+
+const matrices = [
+  [
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1],
+  ],
+  [
+    [1, 0, 0],
+    [0, 0, -1],
+    [0, 1, 0],
+  ],
+  [
+    [1, 0, 0],
+    [0, -1, 0],
+    [0, 0, -1],
+  ],
+  [
+    [1, 0, 0],
+    [0, 0, 1],
+    [0, -1, 0],
+  ],
+  //
+  [
+    [0, -1, 0],
+    [1, 0, 0],
+    [0, 0, 1],
+  ],
+  [
+    [0, 0, 1],
+    [1, 0, 0],
+    [0, 1, 0],
+  ],
+  [
+    [0, 1, 0],
+    [1, 0, 0],
+    [0, 0, -1],
+  ],
+  [
+    [0, 0, -1],
+    [1, 0, 0],
+    [0, -1, 0],
+  ],
+  //
+  [
+    [-1, 0, 0],
+    [0, -1, 0],
+    [0, 0, 1],
+  ],
+  [
+    [-1, 0, 0],
+    [0, 0, -1],
+    [0, -1, 0],
+  ],
+  [
+    [-1, 0, 0],
+    [0, 1, 0],
+    [0, 0, -1],
+  ],
+  [
+    [-1, 0, 0],
+    [0, 0, 1],
+    [0, 1, 0],
+  ],
+  //
+  [
+    [0, 1, 0],
+    [-1, 0, 0],
+    [0, 0, 1],
+  ],
+  [
+    [0, 0, 1],
+    [-1, 0, 0],
+    [0, -1, 0],
+  ],
+  [
+    [0, -1, 0],
+    [-1, 0, 0],
+    [0, 0, -1],
+  ],
+  [
+    [0, 0, -1],
+    [-1, 0, 0],
+    [0, 1, 0],
+  ],
+  //
+  [
+    [0, 0, -1],
+    [0, 1, 0],
+    [1, 0, 0],
+  ],
+  [
+    [0, 1, 0],
+    [0, 0, 1],
+    [1, 0, 0],
+  ],
+  [
+    [0, 0, 1],
+    [0, -1, 0],
+    [1, 0, 0],
+  ],
+  [
+    [0, -1, 0],
+    [0, 0, -1],
+    [1, 0, 0],
+  ],
+  //
+  [
+    [0, 0, -1],
+    [0, -1, 0],
+    [-1, 0, 0],
+  ],
+  [
+    [0, -1, 0],
+    [0, 0, 1],
+    [-1, 0, 0],
+  ],
+  [
+    [0, 0, 1],
+    [0, 1, 0],
+    [-1, 0, 0],
+  ],
+  [
+    [0, 1, 0],
+    [0, 0, -1],
+    [-1, 0, 0],
+  ],
+];
+
+const multiplyWithMatrix = ({ x, y, z }: Position3D, matrix: number[][]) => {
+  return {
+    x: matrix[0][0] * x + matrix[0][1] * y + matrix[0][2] * z,
+    y: matrix[1][0] * x + matrix[1][1] * y + matrix[1][2] * z,
+    z: matrix[2][0] * x + matrix[2][1] * y + matrix[2][2] * z,
+  };
+};
+
+const allRotations2 = (points: Position3D[]) => {
+  return matrices.map((m) => {
+    return points.map((p) => multiplyWithMatrix(p, m));
+  });
 };
 
 export const getOffsetFromBToA = (from: Position3D, to: Position3D) => {
@@ -122,12 +264,22 @@ export const part1 = (useTestData: boolean = false): number => {
       .map((coords) => ({ x: coords[0], y: coords[1], z: coords[2] }))
   );
 
-  for (let i = 0; i < reports.length; i++) {
-    for (let j = i + 1; j < reports.length; j++) {
-      const scannerA = reports[i];
-      const scannerB = reports[j];
+  const scannerOffsets: Position3D[] = [];
+  const seen = new Set<number>();
+  const found = [0];
 
-      for (const rotation of allRotations(scannerB)) {
+  while (found.length !== 0) {
+    const current = found.pop()!;
+    if (seen.has(current)) continue;
+    seen.add(current);
+
+    for (let i = 0; i < reports.length; i++) {
+      if (i === current || seen.has(i)) continue;
+
+      const scannerA = reports[current];
+      const scannerB = reports[i];
+
+      loop1: for (const rotation of allRotations2(scannerB)) {
         for (const [a, b] of oneFromEach(scannerA, rotation)) {
           const set = new StringifiedSet<Position3D>();
           scannerA.forEach((p) => set.add(p));
@@ -137,16 +289,16 @@ export const part1 = (useTestData: boolean = false): number => {
 
           const count = offsetPoints.filter((p) => set.has(p)).length;
           if (count >= 12) {
-            reports[j] = offsetPoints;
+            reports[i] = offsetPoints;
+            found.push(i);
+            scannerOffsets.push(offset);
             console.log(offset);
+            console.log(seen);
+            break loop1;
           }
         }
       }
-
-      // only consider one pair for now
-      // break;
     }
-    // break;
   }
 
   const beacons = new StringifiedSet<Position3D>();
@@ -158,6 +310,22 @@ export const part1 = (useTestData: boolean = false): number => {
 
   console.log(beacons);
   console.log(beacons.size);
+
+  const positions = beacons.keys();
+
+  let max = -Infinity;
+  for (let i = 0; i < scannerOffsets.length; i++) {
+    for (let j = i + 1; j < scannerOffsets.length; j++) {
+      const a = scannerOffsets[i];
+      const b = scannerOffsets[j];
+
+      const dist =
+        Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z);
+      max = Math.max(dist, max);
+    }
+  }
+
+  console.log(max);
 
   // const scanner0 = reports[0];
   // const scanner1 = reports[1];
