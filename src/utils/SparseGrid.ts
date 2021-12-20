@@ -152,6 +152,19 @@ export class SparseGrid<T> {
     return grid;
   }
 
+  public static fromString2(gridString: string) {
+    const elements = lineify(gridString).map((line) => line.split(""));
+    const grid = new this<string>();
+
+    for (let i = 0; i < elements.length; i++) {
+      for (let j = 0; j < elements[i].length; j++) {
+        grid.set({ x: j, y: i }, elements[i][j]);
+      }
+    }
+
+    return grid;
+  }
+
   get(position: Position) {
     return this.map.get(SparseGrid.positionToString(position));
   }
