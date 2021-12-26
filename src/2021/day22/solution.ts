@@ -134,6 +134,17 @@ export const partition = (
   return [];
 };
 
+const isInsideB = (a: Cuboid, b: Cuboid) => {
+  return (
+    b.xMin <= a.xMin &&
+    b.xMax >= a.xMax &&
+    b.yMin <= a.yMin &&
+    b.yMax >= a.yMax &&
+    b.zMin <= a.zMin &&
+    b.zMax >= a.zMax
+  );
+};
+
 const printCuboidCords = (c: Cuboid) => {
   let count = 1;
   for (let i = c.xMin; i <= c.xMax; i++) {
@@ -221,13 +232,19 @@ export const part2 = (useTestData: boolean = false): number => {
   let count = 0;
   for (const other of cuboids.slice(1)) {
     console.log(count++);
+    console.log(current.length);
     let remaining: Cuboid[] = [other];
 
-    const candidates = new Set<number>();
+    current = current.filter((a) => !isInsideB(a, other));
+
+    const candidates: Cuboid[] = [];
+    const newCurrent: Cuboid[] = [];
     for (let i = 0; i < current.length; i++) {
       const { both } = getPartitions(current[i], other);
       if (both.length !== 0) {
-        candidates.add(i);
+        candidates.push(current[i]);
+      } else {
+        newCurrent.push(current[i]);
       }
     }
 
@@ -238,11 +255,11 @@ export const part2 = (useTestData: boolean = false): number => {
         const rem = remaining[j];
         // console.log(current.length);
 
-        for (let i = 0; i < current.length; i++) {
+        for (let i = 0; i < candidates.length; i++) {
           // if (!candidates.has(i)) continue;
-          const { a, b, both } = getPartitions(current[i], rem);
+          const { a, b, both } = getPartitions(candidates[i], rem);
           if (both.length !== 0) {
-            current.splice(i, 1, ...a, ...both);
+            candidates.splice(i, 1, ...a, ...both);
             // console.log(
             //   `### turn these coords from ${current[i].set} to ${rem.set}`
             // );
@@ -269,7 +286,9 @@ export const part2 = (useTestData: boolean = false): number => {
         }
       }
     }
-    current.push(...remaining);
+    current = [...newCurrent, ...remaining, ...candidates];
+    // current.push(...remaining);
+    // current.push(...candidates);
     // console.log(`### add these remaining as`);
     // for (const a of remaining) {
     //   printCuboidCords(a);
