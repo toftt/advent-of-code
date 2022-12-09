@@ -1,8 +1,10 @@
+import { performance } from "perf_hooks";
 {{#each years}}
 import * as year{{year}} from "../{{year}}";
 {{/each}}
 
 export const runSolution = (year: string, day: string, part: string, useTestData: boolean = false) => {
+	const startTime = performance.now();
   switch (year) {
 		{{#each years}}
 		case "{{year}}": {
@@ -25,4 +27,6 @@ export const runSolution = (year: string, day: string, part: string, useTestData
 			throw new Error(`Year ${year} does not exists.`);
 		}
   }
+	const endTime = performance.now();
+	console.log(`Solution took ${endTime - startTime} milliseconds`)
 };
