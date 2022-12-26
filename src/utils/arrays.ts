@@ -10,3 +10,17 @@ export const enumerate = <T>(it: Iterable<T>) => {
     }
   })();
 };
+
+export const partition = <T>(it: Iterable<T>, size: number) => {
+  return (function* () {
+    let current = [];
+    for (const item of it) {
+      current.push(item);
+      if (current.length === size) {
+        yield current;
+        current = [];
+      }
+    }
+    if (current.length !== 0) return current;
+  })();
+};
