@@ -29,8 +29,6 @@ export const part1 = (useTestData: boolean = false): number => {
     cycle++;
   }
 
-  console.log(values);
-
   return sum(values);
 };
 
@@ -47,7 +45,6 @@ export const part2 = (useTestData: boolean = false): string => {
   while (instructions.length) {
     const crtPosition = (cycle - 1) % 40;
     pixels.push(Math.abs(registerValue - crtPosition) <= 1 ? "#" : ".");
-    console.log({ registerValue, cycle });
 
     if (executing === null) {
       const inst = instructions.shift()!;
