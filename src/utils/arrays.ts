@@ -2,8 +2,12 @@ export const last = <T>(array: T[]) => {
   return array[array.length - 1];
 };
 
+export const first = <T>(array: T[]) => {
+  return array[0];
+};
+
 export const enumerate = <T>(
-  it: Iterable<T>
+  it: Iterable<T>,
 ): Iterable<readonly [T, number]> => {
   const iterator = it[Symbol.iterator]();
 

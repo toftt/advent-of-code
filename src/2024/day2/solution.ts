@@ -1,5 +1,4 @@
-import { intify, lineify, readInput } from "~utils";
-import { windows } from "~utils/windows";
+import { combinations, intify, lineify, readInput, windows } from "~utils";
 
 const isSafe = (report: number[]) => {
   let isDistanceCorrect = true;
@@ -23,22 +22,8 @@ const isSafe = (report: number[]) => {
   return isDistanceCorrect && (isDecreasing || isIncreasing);
 };
 
-const isSafe2 = (report: number[]) => {
-  if (isSafe(report)) {
-    console.log(`Original ${report} is safe`);
-    return true;
-  }
-
-  for (let i = 0; i < report.length; i++) {
-    const ne = report.slice();
-    ne.splice(i, 1);
-    if (isSafe(ne)) {
-      console.log(`Modified ${ne} is safe`);
-      return true;
-    }
-  }
-
-  return false;
+const isSafeWithTolerance = (report: number[]) => {
+  return [report, ...combinations(report, report.length - 1)].some(isSafe);
 };
 
 export const part1 = (useTestData: boolean = false): number => {
@@ -47,7 +32,6 @@ export const part1 = (useTestData: boolean = false): number => {
 
   const safe = reports.filter(isSafe);
 
-  console.log(safe);
   return safe.length;
 };
 
@@ -56,7 +40,7 @@ export const part2 = (useTestData: boolean = false): number => {
 
   const reports: number[][] = lineify(input).map(intify);
 
-  const safe = reports.filter(isSafe2);
+  const safe = reports.filter(isSafeWithTolerance);
 
   return safe.length;
 };

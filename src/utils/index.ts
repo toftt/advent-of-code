@@ -9,3 +9,4 @@ export * from "./SparseGrid";
 export * from "./lists";
 export * from "./PriorityQueue";
 export * from "./arrays";
+export * from "./windows";
