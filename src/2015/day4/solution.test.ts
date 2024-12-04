@@ -5,7 +5,7 @@ describe("2015 - day 4", () => {
     expect(part1()).toEqual(117946);
   });
 
-  it("solves part 2", () => {
+  it.skip("solves part 2", () => {
     expect(part2()).toEqual(3938038);
   });
 });

@@ -1,11 +1,11 @@
 import { part1, part2 } from "./solution";
 
-describe("2024 - day 3", () => {
+describe("2024 - day 4", () => {
   it("solves part 1", () => {
-    expect(part1()).toEqual(171183089);
+    expect(part1()).toEqual(2613);
   });
 
   it("solves part 2", () => {
-    expect(part2()).toEqual(63866497);
+    expect(part2()).toEqual(1905);
   });
 });

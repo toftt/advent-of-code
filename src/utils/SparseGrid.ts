@@ -1,13 +1,16 @@
-import { lineify, parseInts } from ".";
+import {
+  ALL_DIRECTIONS,
+  CARDINAL_DIRECTIONS,
+  Direction,
+  lineify,
+  move,
+  parseInts,
+  Position,
+} from ".";
 
 interface Bound {
   min: number;
   max: number;
-}
-
-export interface Position {
-  x: number;
-  y: number;
 }
 
 export class StringifiedSet<T> {
@@ -79,38 +82,11 @@ export class SparseGrid<T> {
       includeDiagonals?: boolean;
       /** If true, will not return positions that are outside the current "bounds" of the grid. */
       bounded?: boolean;
-    } = {}
+    } = {},
   ): Position[] {
-    const { x, y } = position;
-    const adjecentPositions = [
-      { x: x + 1, y },
-      { x: x - 1, y },
-      { x, y: y + 1 },
-      { x, y: y - 1 },
-    ];
-
-    if (includeDiagonals) {
-      adjecentPositions.push(
-        ...[
-          {
-            x: x - 1,
-            y: y - 1,
-          },
-          {
-            x: x + 1,
-            y: y - 1,
-          },
-          {
-            x: x - 1,
-            y: y + 1,
-          },
-          {
-            x: x + 1,
-            y: y + 1,
-          },
-        ]
-      );
-    }
+    const adjecentPositions = (
+      includeDiagonals ? ALL_DIRECTIONS : CARDINAL_DIRECTIONS
+    ).map((dir) => move(position, dir));
 
     if (bounded) {
       return adjecentPositions.filter(
@@ -118,11 +94,35 @@ export class SparseGrid<T> {
           pos.x >= this.bounds.x.min &&
           pos.x <= this.bounds.x.max &&
           pos.y >= this.bounds.y.min &&
-          pos.y <= this.bounds.y.max
+          pos.y <= this.bounds.y.max,
       );
     }
 
     return adjecentPositions;
+  }
+
+  public traverseDirection(
+    position: Position,
+    direction: Direction,
+    maxDistance?: number,
+  ): { position: Position; value: T }[] {
+    const values = [];
+    let currentPosition = position;
+    let steps = 0;
+
+    while (
+      this.has(currentPosition) &&
+      (maxDistance === undefined || steps < maxDistance)
+    ) {
+      values.push({
+        position: currentPosition,
+        value: this.get(currentPosition)!,
+      });
+      currentPosition = move(currentPosition, direction);
+      steps++;
+    }
+
+    return values;
   }
 
   public static fromArray<T>(elements: T[][]) {
@@ -139,7 +139,7 @@ export class SparseGrid<T> {
 
   public static fromString(gridString: string) {
     const elements = lineify(gridString).map((line) =>
-      parseInts(line.split(""))
+      parseInts(line.split("")),
     );
     const grid = new this<number>();
 
@@ -196,7 +196,7 @@ export class SparseGrid<T> {
 
   entries() {
     return [...this.map.entries()].map(
-      ([k, v]) => <const>[SparseGrid.stringToPosition(k), v]
+      ([k, v]) => <const>[SparseGrid.stringToPosition(k), v],
     );
   }
 
