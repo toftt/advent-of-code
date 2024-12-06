@@ -4,3 +4,4 @@ yarn-error.log
 src/2015/index.ts
 src/2021/index.ts
 src/cli/run.ts
+dist/

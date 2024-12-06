@@ -31,3 +31,19 @@ export const enumerate = <T>(
 
   return enumeratedIterator;
 };
+
+export function twine<O, M>(array: O[], mappingFn: (el: O) => M): [O, M][] {
+  return array.map((el) => [el, mappingFn(el)]);
+}
+
+export function namedTwine<O, M, N1 extends string, N2 extends string>(
+  array: O[],
+  originalName: N1,
+  mappedName: N2,
+  mappingFunction: (el: O) => M,
+): Array<{ [K in N1]: O } & { [K in N2]: M }> {
+  return array.map((el) => ({
+    [originalName]: el,
+    [mappedName]: mappingFunction(el),
+  })) as Array<{ [K in N1]: O } & { [K in N2]: M }>;
+}

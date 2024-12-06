@@ -60,3 +60,34 @@ export function move(
     y: position.y + offset.y * distance,
   };
 }
+
+export function manhattanDistance(a: Position, b: Position) {
+  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+}
+
+interface Bound {
+  min: number;
+  max: number;
+}
+
+export function getBoundsFromPositions(positions: Position[]) {
+  const bounds = {
+    x: {
+      min: Infinity,
+      max: -Infinity,
+    },
+    y: {
+      min: Infinity,
+      max: -Infinity,
+    },
+  };
+
+  positions.forEach((position) => {
+    if (position.x > bounds.x.max) bounds.x.max = position.x;
+    if (position.x < bounds.x.min) bounds.x.min = position.x;
+    if (position.y > bounds.y.max) bounds.y.max = position.y;
+    if (position.y < bounds.y.min) bounds.y.min = position.y;
+  });
+
+  return bounds;
+}

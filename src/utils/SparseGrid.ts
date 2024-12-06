@@ -57,10 +57,10 @@ export class StringifiedSet<T> {
 }
 
 export class SparseGrid<T> {
-  private readonly map: Map<string, T> = new Map();
-  public readonly bounds: { x: Bound; y: Bound } = {
-    x: { min: 0, max: 0 },
-    y: { min: 0, max: 0 },
+  private map: Map<string, T> = new Map();
+  public bounds: { x: Bound; y: Bound } = {
+    x: { min: Infinity, max: -Infinity },
+    y: { min: Infinity, max: -Infinity },
   };
 
   public static positionToString(position: Position) {
@@ -70,6 +70,13 @@ export class SparseGrid<T> {
   public static stringToPosition(positionString: string): Position {
     const [x, y] = parseInts(positionString.split("."));
     return { x, y };
+  }
+
+  public shallowCopy() {
+    const m = new SparseGrid<T>();
+    m.map = new Map(this.map);
+    m.bounds = this.bounds;
+    return m;
   }
 
   public adjecent(
@@ -89,13 +96,7 @@ export class SparseGrid<T> {
     ).map((dir) => move(position, dir));
 
     if (bounded) {
-      return adjecentPositions.filter(
-        (pos) =>
-          pos.x >= this.bounds.x.min &&
-          pos.x <= this.bounds.x.max &&
-          pos.y >= this.bounds.y.min &&
-          pos.y <= this.bounds.y.max,
-      );
+      return adjecentPositions.filter(this.isWithinBounds.bind(this));
     }
 
     return adjecentPositions;
@@ -104,25 +105,43 @@ export class SparseGrid<T> {
   public traverseDirection(
     position: Position,
     direction: Direction,
-    maxDistance?: number,
+    {
+      maxDistance = Infinity,
+      continueOverGaps = false,
+      untilCondition = (pos: Position) => <boolean>false,
+    } = {},
   ): { position: Position; value: T }[] {
     const values = [];
     let currentPosition = position;
     let steps = 0;
 
     while (
-      this.has(currentPosition) &&
-      (maxDistance === undefined || steps < maxDistance)
+      (this.has(currentPosition) ||
+        (continueOverGaps && this.isWithinBounds(currentPosition))) &&
+      (maxDistance === undefined || steps < maxDistance) &&
+      !untilCondition(currentPosition)
     ) {
-      values.push({
-        position: currentPosition,
-        value: this.get(currentPosition)!,
-      });
+      if (this.has(currentPosition)) {
+        values.push({
+          position: currentPosition,
+          value: this.get(currentPosition)!,
+        });
+      }
+
       currentPosition = move(currentPosition, direction);
       steps++;
     }
 
     return values;
+  }
+
+  public isWithinBounds(pos: Position): boolean {
+    return (
+      pos.x >= this.bounds.x.min &&
+      pos.x <= this.bounds.x.max &&
+      pos.y >= this.bounds.y.min &&
+      pos.y <= this.bounds.y.max
+    );
   }
 
   public static fromArray<T>(elements: T[][]) {
@@ -134,6 +153,15 @@ export class SparseGrid<T> {
       }
     }
 
+    return grid;
+  }
+
+  public static fromPositionArray(positions: Position[]) {
+    const grid = new this<null>();
+
+    for (const position of positions) {
+      grid.set(position, null);
+    }
     return grid;
   }
 

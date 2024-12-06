@@ -3,8 +3,12 @@ import * as day1 from "./day1/solution";
 import * as day2 from "./day2/solution";
 import * as day3 from "./day3/solution";
 import * as day4 from "./day4/solution";
+import * as day5 from "./day5/solution";
+import * as day6 from "./day6/solution";
 
 export { day1 };
 export { day2 };
 export { day3 };
 export { day4 };
+export { day5 };
+export { day6 };

@@ -15,7 +15,8 @@
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
     "noImplicitAny": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "outDir": "./dist"
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]
