@@ -2,7 +2,7 @@ import {
   add,
   Counter,
   lineify,
-  oneFromEach,
+  cartesianProduct,
   readInput,
   StringifiedSet,
   sum,
@@ -20,7 +20,7 @@ function* createDie() {
 export const part1 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
   const [p1StartPos, p2StartPos] = lineify(input).map((x) =>
-    parseInt(x.split(": ")[1])
+    parseInt(x.split(": ")[1]),
   );
 
   const p1 = { pos: p1StartPos - 1, score: 0 };
@@ -62,7 +62,7 @@ interface GameState {
 export const part2 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
   const [p1StartPos, p2StartPos] = lineify(input).map((x) =>
-    parseInt(x.split(": ")[1])
+    parseInt(x.split(": ")[1]),
   );
 
   const p1 = { pos: p1StartPos - 1, score: 0 };
@@ -79,12 +79,12 @@ export const part2 = (useTestData: boolean = false): number => {
     [...gameStates.entries()].map(([k, v]) => [JSON.parse(k), v]);
 
   const diceCombinations = new Counter(
-    oneFromEach([1, 2, 3], [1, 2, 3], [1, 2, 3]).map((ds) => sum(ds))
+    cartesianProduct([1, 2, 3], [1, 2, 3], [1, 2, 3]).map((ds) => sum(ds)),
   );
   set(initialState, 1);
   while (true) {
     const ongoingGames = entries().filter(
-      ([s, _c]) => s.p1.score < 21 && s.p2.score < 21
+      ([s, _c]) => s.p1.score < 21 && s.p2.score < 21,
     );
     if (ongoingGames.length === 0) break;
 

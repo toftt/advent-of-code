@@ -1,16 +1,16 @@
-import { Counter, lineify, readInput, parseInts, zip } from "~utils";
+import { Counter, lineify, readInput, parseInts, zipMany } from "~utils";
 
 export const part1 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
   const lines = lineify(input).map((bin) => bin.split(""));
 
-  const perPosition = zip(...lines).map((x) => new Counter(x));
+  const perPosition = zipMany(...lines).map((x) => new Counter(x));
 
   const gammaString = perPosition.map((c) => c.mostCommon()[0]).join("");
   const epsilonString = perPosition.map((c) => c.leastCommon()[0]).join("");
 
   const [gamma, epsilon] = [gammaString, epsilonString].map((x) =>
-    parseInt(x, 2)
+    parseInt(x, 2),
   );
 
   return gamma * epsilon;
@@ -32,7 +32,7 @@ export const part2 = (useTestData: boolean = false): number => {
 
     const mostCommon = counts.ones >= counts.zeroes ? "1" : "0";
     gammaCandidates = gammaCandidates.filter(
-      (cand) => cand[idx] === mostCommon
+      (cand) => cand[idx] === mostCommon,
     );
 
     if (gammaCandidates.length === 1) break;
@@ -44,7 +44,7 @@ export const part2 = (useTestData: boolean = false): number => {
 
     const leastCommon = counts.ones < counts.zeroes ? "1" : "0";
     epsilonCandidates = epsilonCandidates.filter(
-      (cand) => cand[idx] === leastCommon
+      (cand) => cand[idx] === leastCommon,
     );
 
     if (epsilonCandidates.length === 1) break;

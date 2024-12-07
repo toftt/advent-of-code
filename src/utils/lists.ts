@@ -1,4 +1,16 @@
-export const zip = <T>(...arrays: T[][]): T[][] => {
+export const zip = <A, B>(a: A[], b: B[]): [A, B][] => {
+  if (a.length !== b.length) {
+    throw new Error("arrays have to be of same length");
+  }
+
+  const result: [A, B][] = [];
+  for (let i = 0; i < a.length; i++) {
+    result.push([a[i], b[i]]);
+  }
+
+  return result;
+};
+export const zipMany = <T>(...arrays: T[][]): T[][] => {
   if (arrays.length < 2) throw new Error("need at least 2 arrays");
 
   const len = arrays[0].length;
@@ -14,7 +26,7 @@ export const zip = <T>(...arrays: T[][]): T[][] => {
 };
 
 export const transpose = <T>(matrix: T[][]): T[][] => {
-  return zip(...matrix);
+  return zipMany(...matrix);
 };
 
 export const findIndex = <T>(arr: T[][], el: T): [number, number] | null => {

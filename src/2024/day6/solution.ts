@@ -43,11 +43,8 @@ export const part1 = (useTestData: boolean = false): number => {
     current = move(current, dir);
   }
 
-  grid.print();
-
   const result = grid.values().filter((x) => x === "X");
-  console.log(result.length);
-  return 0;
+  return result.length;
 };
 
 const isLoop = (grid: SparseGrid<string>) => {
@@ -128,7 +125,6 @@ export const part2 = (useTestData: boolean = false): number => {
 
   let total = 0;
   let i = 0;
-  console.log(possibleObstacles.size);
   for (const obstaclePos of possibleObstacles.keys()) {
     i++;
     const newGrid = grid.shallowCopy();
@@ -156,6 +152,5 @@ export const part2 = (useTestData: boolean = false): number => {
     }
   }
 
-  console.log(total);
-  return 0;
+  return total;
 };

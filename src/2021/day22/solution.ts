@@ -1,4 +1,4 @@
-import { intify, lineify, oneFromEach, readInput } from "~utils";
+import { intify, lineify, cartesianProduct, readInput } from "~utils";
 
 export const part1 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
@@ -74,7 +74,7 @@ export const partition = (
   aMin: number,
   aMax: number,
   bMin: number,
-  bMax: number
+  bMax: number,
 ): Array<Partition> => {
   // not overlapping
   if (aMin > bMax || bMin > aMax) {
@@ -161,7 +161,11 @@ const getPartitions = (a: Cuboid, b: Cuboid) => {
   const yPartitions = partition(a.yMin, a.yMax, b.yMin, b.yMax);
   const zPartitions = partition(a.zMin, a.zMax, b.zMin, b.zMax);
 
-  const combinedPartitions = oneFromEach(xPartitions, yPartitions, zPartitions)
+  const combinedPartitions = cartesianProduct(
+    xPartitions,
+    yPartitions,
+    zPartitions,
+  )
     .map((parts) => {
       const ps = parts.map((x) => x.part);
       let resolvedPart: null | Partition["part"] = null;
@@ -191,7 +195,7 @@ const getPartitions = (a: Cuboid, b: Cuboid) => {
       });
       return acc;
     },
-    { a: [], b: [], both: [] } as any
+    { a: [], b: [], both: [] } as any,
   );
 };
 

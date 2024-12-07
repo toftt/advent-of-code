@@ -69,7 +69,7 @@ export const combinations = <T>(elements: T[], size: number): T[][] => {
   return result;
 };
 
-export const oneFromEach = <T>(...collections: T[][]) => {
+export const cartesianProduct = <T>(...collections: T[][]) => {
   if (collections.length < 2) throw Error("you need at least two arguments");
 
   let result: T[][] = collections.shift()!.map((x) => [x]);
@@ -97,4 +97,12 @@ export const allCombinations = <T>(elements: T[], maxSize: number) => {
   // empty set
   result.push([]);
   return result;
+};
+
+export const cartesianPower = <T>(elements: T[], power: number) => {
+  if (power < 1) throw "Power has to be > 0";
+  if (power === 1) return elements.map((e) => [e]);
+
+  const collections = new Array<T[]>(power).fill(elements);
+  return cartesianProduct(...collections);
 };

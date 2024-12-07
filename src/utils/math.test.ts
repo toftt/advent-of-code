@@ -1,4 +1,10 @@
-import { add, allCombinations, combinations, median, oneFromEach } from ".";
+import {
+  add,
+  allCombinations,
+  combinations,
+  median,
+  cartesianProduct,
+} from ".";
 
 describe("add", () => {
   it("adds (1)", () => {
@@ -38,8 +44,8 @@ describe("median", () => {
           { a: "b", val: 2 },
           { a: "c", val: 3 },
         ],
-        (a) => a.val
-      )
+        (a) => a.val,
+      ),
     ).toEqual(2);
 
     expect(
@@ -50,8 +56,8 @@ describe("median", () => {
           { a: "c", val: 3 },
           { a: "d", val: 4 },
         ],
-        (a) => a.val
-      )
+        (a) => a.val,
+      ),
     ).toEqual(2.5);
   });
 });
@@ -66,7 +72,7 @@ describe("combine", () => {
         [1, 2],
         [1, 3],
         [2, 3],
-      ])
+      ]),
     );
   });
 
@@ -80,26 +86,26 @@ describe("allCombinations", () => {
   it("combines", () => {
     const result = allCombinations([1, 2, 3], 2);
     expect(result).toEqual(
-      expect.arrayContaining([[1, 2], [1, 3], [2, 3], [1], [2], [3], []])
+      expect.arrayContaining([[1, 2], [1, 3], [2, 3], [1], [2], [3], []]),
     );
   });
 });
 
 describe("oneFromEach", () => {
   it("take on of each 1", () => {
-    const result = oneFromEach([1, 2], [3, 4]);
+    const result = cartesianProduct([1, 2], [3, 4]);
     expect(result).toEqual(
       expect.arrayContaining([
         [1, 3],
         [1, 4],
         [2, 3],
         [2, 4],
-      ])
+      ]),
     );
   });
 
   it("take on of each 2", () => {
-    const result = oneFromEach([1, 2], [3, 4], [5, 6]);
+    const result = cartesianProduct([1, 2], [3, 4], [5, 6]);
     expect(result).toEqual(
       expect.arrayContaining([
         [1, 3, 5],
@@ -110,7 +116,7 @@ describe("oneFromEach", () => {
         [2, 3, 6],
         [2, 4, 5],
         [2, 4, 6],
-      ])
+      ]),
     );
   });
 });

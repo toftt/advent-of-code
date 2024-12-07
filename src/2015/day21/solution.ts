@@ -1,4 +1,4 @@
-import { allCombinations, lineify, oneFromEach, readInput } from "~utils";
+import { allCombinations, lineify, cartesianProduct, readInput } from "~utils";
 
 const weapons: Item[] = [
   { cost: 8, damage: 4, armor: 0 },
@@ -46,22 +46,22 @@ const ringCombinations = allCombinations(rings, 2).map((combo) =>
     cost: 0,
     damage: 0,
     armor: 0,
-  })
+  }),
 );
 
 const armorCombinations = [...armors, { cost: 0, damage: 0, armor: 0 }];
 const weaponCombinations = weapons;
 
-const equipmentCombinations = oneFromEach(
+const equipmentCombinations = cartesianProduct(
   ringCombinations,
   armorCombinations,
-  weaponCombinations
+  weaponCombinations,
 ).map((combo) =>
   combo.reduce((acc, item) => mergeItems(acc, item), {
     cost: 0,
     damage: 0,
     armor: 0,
-  })
+  }),
 );
 
 const willWinFight = (player: Actor, boss: Actor) => {
@@ -91,7 +91,7 @@ export const part1 = (useTestData: boolean = false): number => {
   equipmentCombinations.sort((a, b) => a.cost - b.cost);
 
   const winningCombos = equipmentCombinations.filter((equ) =>
-    willWinFight({ hp: 100, damage: equ.damage, armor: equ.armor }, boss)
+    willWinFight({ hp: 100, damage: equ.damage, armor: equ.armor }, boss),
   );
 
   return winningCombos[0].cost;
@@ -115,7 +115,7 @@ export const part2 = (useTestData: boolean = false): number => {
 
   const losingCombos = equipmentCombinations.filter(
     (equ) =>
-      !willWinFight({ hp: 100, damage: equ.damage, armor: equ.armor }, boss)
+      !willWinFight({ hp: 100, damage: equ.damage, armor: equ.armor }, boss),
   );
 
   return losingCombos[0].cost;

@@ -1,11 +1,11 @@
 import { format } from "path/posix";
 import {
   lineify,
-  oneFromEach,
+  cartesianProduct,
   readInput,
   sections,
   StringifiedSet,
-  zip,
+  zipMany,
 } from "~utils";
 
 interface Position3D {
@@ -18,7 +18,7 @@ const rotateX = ({ x, y, z }: Position3D, theta: number = Math.PI / 2) => {
   const matrix = [
     [1, 0, 0],
     [0, Math.cos(theta), -Math.sin(theta)].map((x) =>
-      parseFloat(x.toFixed(10))
+      parseFloat(x.toFixed(10)),
     ),
     [0, Math.sin(theta), Math.cos(theta)].map((x) => parseFloat(x.toFixed(10))),
   ];
@@ -35,7 +35,7 @@ const rotateY = ({ x, y, z }: Position3D, theta: number = Math.PI / 2) => {
     [Math.cos(theta), 0, Math.sin(theta)].map((x) => parseFloat(x.toFixed(10))),
     [0, 1, 0],
     [-Math.sin(theta), 0, Math.cos(theta)].map((x) =>
-      parseFloat(x.toFixed(10))
+      parseFloat(x.toFixed(10)),
     ),
   ];
 
@@ -49,7 +49,7 @@ const rotateY = ({ x, y, z }: Position3D, theta: number = Math.PI / 2) => {
 const rotateZ = ({ x, y, z }: Position3D, theta: number = Math.PI / 2) => {
   const matrix = [
     [Math.cos(theta), -Math.sin(theta), 0].map((x) =>
-      parseFloat(x.toFixed(10))
+      parseFloat(x.toFixed(10)),
     ),
     [Math.sin(theta), Math.cos(theta), 0].map((x) => parseFloat(x.toFixed(10))),
     [0, 0, 1],
@@ -261,7 +261,7 @@ export const part1 = (useTestData: boolean = false): number => {
     lineify(s)
       .slice(1)
       .map((l) => l.split(",").map((x) => parseInt(x)))
-      .map((coords) => ({ x: coords[0], y: coords[1], z: coords[2] }))
+      .map((coords) => ({ x: coords[0], y: coords[1], z: coords[2] })),
   );
 
   const scannerOffsets: Position3D[] = [];
@@ -280,7 +280,7 @@ export const part1 = (useTestData: boolean = false): number => {
       const scannerB = reports[i];
 
       loop1: for (const rotation of allRotations2(scannerB)) {
-        for (const [a, b] of oneFromEach(scannerA, rotation)) {
+        for (const [a, b] of cartesianProduct(scannerA, rotation)) {
           const set = new StringifiedSet<Position3D>();
           scannerA.forEach((p) => set.add(p));
 
