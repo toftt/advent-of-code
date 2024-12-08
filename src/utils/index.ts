@@ -11,3 +11,4 @@ export * from "./PriorityQueue";
 export * from "./arrays";
 export * from "./windows";
 export * from "./position";
+export * from "./object";

@@ -70,7 +70,12 @@ interface Bound {
   max: number;
 }
 
-export function getBoundsFromPositions(positions: Position[]) {
+interface Bounds {
+  x: Bound;
+  y: Bound;
+}
+
+export function getBoundsFromPositions(positions: Position[]): Bounds {
   const bounds = {
     x: {
       min: Infinity,
@@ -90,4 +95,12 @@ export function getBoundsFromPositions(positions: Position[]) {
   });
 
   return bounds;
+}
+
+export function* allPositionsFromBounds(bounds: Bounds) {
+  for (let i = bounds.x.min; i <= bounds.x.max; i++) {
+    for (let j = bounds.y.min; j <= bounds.y.max; j++) {
+      yield { x: i, y: j };
+    }
+  }
 }

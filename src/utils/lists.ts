@@ -38,3 +38,15 @@ export const findIndex = <T>(arr: T[][], el: T): [number, number] | null => {
 
   return null;
 };
+
+export const groupBy = <T>(arr: T[], getKey: (el: T) => string) => {
+  const result: { [key: string]: T[] } = {};
+  for (const element of arr) {
+    const key = getKey(element);
+    if (!result[key]) {
+      result[key] = [];
+    }
+    result[key].push(element);
+  }
+  return result;
+};
