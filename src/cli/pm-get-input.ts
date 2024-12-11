@@ -38,6 +38,7 @@ axios
     headers: {
       cookie: `session=${sessionCookie}`,
     },
+    transformResponse: (data) => data,
   })
   .then((response) => {
     const inputPath = path.join(targetFolder, "input");
