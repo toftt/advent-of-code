@@ -90,7 +90,6 @@ const countSides = (p: any) => {
           manhattanDistance(c.p, x.p) === 1,
       ),
     );
-    // console.log("ass");
     while (idx !== -1) {
       const toAdd = p.splice(idx, 1)[0];
       cg.push(toAdd);
