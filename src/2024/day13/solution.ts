@@ -41,50 +41,6 @@ export const part1 = (useTestData: boolean = false): number => {
   return total;
 };
 
-const modularInverse = (a: number, n: number) => {
-  let t = 0;
-  let newT = 1;
-  let r = n;
-  let newR = a;
-
-  while (newR !== 0) {
-    let quotient = Math.floor(r / newR);
-    [t, newT] = [newT, t - quotient * newT];
-    [r, newR] = [newR, r - quotient * newR];
-  }
-
-  if (r > 1) {
-    throw "not invertible in ring";
-  }
-
-  if (t < 0) {
-    t = t + n;
-  }
-
-  return t;
-};
-
-const solveModSystem = (moduli: number[], remainders: number[]) => {
-  let moduliProduct = product(moduli);
-
-  let result = 0;
-  for (let i = 0; i < moduli.length; i++) {
-    let ni = Math.floor(moduliProduct / moduli[i]);
-    result += remainders[i] * ni * modularInverse(ni, moduli[i]);
-  }
-
-  return result % moduliProduct;
-};
-
-const factorize = (n: number) => {
-  let result = [];
-  for (let i = 2; i < n / 2 + 1; i++) {
-    if (n % i === 0) result.push(i);
-  }
-
-  return result.length === 0 ? [n] : result;
-};
-
 export const part2 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
   const configs = group(
