@@ -4,6 +4,8 @@ import {
   combinations,
   median,
   cartesianProduct,
+  gcd,
+  lcm,
 } from ".";
 
 describe("add", () => {
@@ -118,5 +120,29 @@ describe("oneFromEach", () => {
         [2, 4, 6],
       ]),
     );
+  });
+});
+
+describe("gcd", () => {
+  it.each([
+    [1071, 462, 21],
+    [13, 145, 1],
+    [2323, 149, 1],
+    [150, 5, 5],
+    [1500, 240, 60],
+  ])("gcd(%i, %i) should equal %i", (a, b, r) => {
+    expect(gcd(a, b)).toEqual(r);
+  });
+});
+
+describe("lcm", () => {
+  it.each([
+    [1071, 462, 23562],
+    [13, 145, 1885],
+    [2323, 149, 346_127],
+    [150, 5, 150],
+    [1500, 240, 6000],
+  ])("lcm(%i, %i) should equal %i", (a, b, r) => {
+    expect(lcm(a, b)).toEqual(r);
   });
 });

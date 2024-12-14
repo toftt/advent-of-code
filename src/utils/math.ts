@@ -7,6 +7,15 @@ export const sum = (iterable: Iterable<number>) => {
   return result;
 };
 
+export const product = (iterable: Iterable<number>) => {
+  let result = 1;
+  for (const num of iterable) {
+    result *= num;
+  }
+
+  return result;
+};
+
 export function add(a: number): (a: number) => number;
 export function add(a: number, b: number): number;
 export function add(a: number, b?: number) {
@@ -105,4 +114,23 @@ export const cartesianPower = <T>(elements: T[], power: number) => {
 
   const collections = new Array<T[]>(power).fill(elements);
   return cartesianProduct(...collections);
+};
+
+export const gcd = (a: number, b: number) => {
+  let l = Math.max(a, b);
+  let s = Math.min(a, b);
+
+  let r = l % s;
+  while (r !== 0) {
+    l = s;
+    s = r;
+    r = l % s;
+  }
+
+  return s;
+};
+
+export const lcm = (a: number, b: number) => {
+  const d = gcd(a, b);
+  return a * (b / d);
 };
