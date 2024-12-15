@@ -23,6 +23,17 @@ export const DIAGONAL_DIRECTIONS: Direction[] = [
   Direction.NW,
 ];
 
+export const REVERESED_DIRECTIONS: Record<Direction, Direction> = {
+  [Direction.N]: Direction.S,
+  [Direction.S]: Direction.N,
+  [Direction.E]: Direction.W,
+  [Direction.W]: Direction.E,
+  [Direction.NE]: Direction.SW,
+  [Direction.SW]: Direction.NE,
+  [Direction.NW]: Direction.SE,
+  [Direction.SE]: Direction.NW,
+};
+
 export const ALL_DIRECTIONS: Direction[] = [
   ...CARDINAL_DIRECTIONS,
   ...DIAGONAL_DIRECTIONS,
