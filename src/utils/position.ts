@@ -61,6 +61,13 @@ export function move(
   };
 }
 
+export function move2(position: Position, direction: Position): Position {
+  return {
+    x: position.x + direction.x,
+    y: position.y + direction.y,
+  };
+}
+
 export function manhattanDistance(a: Position, b: Position) {
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 }
