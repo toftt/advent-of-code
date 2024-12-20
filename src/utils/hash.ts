@@ -192,12 +192,17 @@ export class HashMap<K, V> {
       this.storage.set(hash, []);
     }
     const bucket = this.storage.get(hash)!;
-    if (
-      bucket.findIndex((value) => this.equalsFn(keyToInsert, value.k)) === -1
-    ) {
+
+    const idx = bucket.findIndex((value) =>
+      this.equalsFn(keyToInsert, value.k),
+    );
+    if (idx === -1) {
       bucket.push({ k: keyToInsert, v: valueToInsert });
       this._size++;
+    } else {
+      bucket[idx].v = valueToInsert;
     }
+
     return this;
   }
 

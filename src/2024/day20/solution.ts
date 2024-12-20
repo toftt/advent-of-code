@@ -1,6 +1,7 @@
 import {
   CARDINAL_DIRECTIONS,
   Counter,
+  HashMap,
   HashSet,
   intify,
   lineify,
@@ -87,17 +88,17 @@ export const part2 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
   const grid = SparseGrid.fromString2(input);
 
-  const dist = new Map<string, number>();
+  const dist = new HashMap<Position, number>(
+    (p) => p.x * 1000 + p.y,
+    (a, b) => a.x === b.x && a.y === b.y,
+  );
   const visited = new HashSet<Position>(
     (p) => p.x * 1000 + p.y,
     (a, b) => a.x === b.x && a.y === b.y,
   );
-  // const visited = new StringifiedSet<Position>();
   const unvisited = new PriorityQueue<Position>(
     [],
-    (a, b) =>
-      dist.get(SparseGrid.positionToString(a))! <
-      dist.get(SparseGrid.positionToString(b))!,
+    (a, b) => dist.get(a)! < dist.get(b)!,
   );
 
   const possibleVisits = grid
@@ -107,9 +108,9 @@ export const part2 = (useTestData: boolean = false): number => {
 
   possibleVisits.forEach((p) => {
     if (grid.get(p) === "S") {
-      dist.set(SparseGrid.positionToString(p), 0);
+      dist.set(p, 0);
     } else {
-      dist.set(SparseGrid.positionToString(p), Infinity);
+      dist.set(p, Infinity);
     }
     unvisited.push(p);
   });
@@ -120,10 +121,10 @@ export const part2 = (useTestData: boolean = false): number => {
     for (const node of grid
       .adjecent(current)
       .filter((x) => grid.get(x) !== "#" && !visited.has(x))) {
-      const d1 = dist.get(SparseGrid.positionToString(current))!;
-      const d2 = dist.get(SparseGrid.positionToString(node))!;
+      const d1 = dist.get(current)!;
+      const d2 = dist.get(node)!;
 
-      dist.set(SparseGrid.positionToString(node), Math.min(d1 + 1, d2));
+      dist.set(node, Math.min(d1 + 1, d2));
       unvisited.increasePriority((e) => e.x === node.x && e.y === node.y, node);
     }
 
@@ -140,9 +141,8 @@ export const part2 = (useTestData: boolean = false): number => {
       if (endV === "#") continue;
       const cheatDistance = manhattanDistance(p, endP);
       if (cheatDistance > 20) continue;
-      const nDist =
-        dist.get(SparseGrid.positionToString(endP))! + cheatDistance;
-      const oDist = dist.get(SparseGrid.positionToString(p))!;
+      const nDist = dist.get(endP)! + cheatDistance;
+      const oDist = dist.get(p)!;
       if (nDist < oDist && oDist - nDist >= 50) {
         cheats.push(oDist - nDist);
       }
