@@ -12,3 +12,4 @@ export * from "./arrays";
 export * from "./windows";
 export * from "./position";
 export * from "./object";
+export * from "./hash";

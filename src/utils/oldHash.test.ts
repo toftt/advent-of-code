@@ -1,6 +1,6 @@
-import { HashSet, WithEq, WithHashValues } from "./hash";
+import { OldHashSet, WithEq, OldWithHashValues } from "./oldHash";
 
-class Point implements WithHashValues, WithEq {
+class Point implements OldWithHashValues, WithEq {
   constructor(
     public readonly x: number,
     public readonly y: number,
@@ -18,7 +18,7 @@ class Point implements WithHashValues, WithEq {
 
 describe("HashSet", () => {
   it("allows adding and checking membership", () => {
-    const s = new HashSet();
+    const s = new OldHashSet();
 
     const a = new Point(1, 3);
     const b1 = new Point(2, 4);

@@ -7,7 +7,7 @@ import {
   SparseGrid,
   StringifiedSet,
 } from "~utils";
-import { HashSet } from "~utils/hash";
+import { OldHashSet } from "~utils/oldHash";
 
 export const part1 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
