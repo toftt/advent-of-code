@@ -1,10 +1,12 @@
 import {
+  CARDINAL_DIRECTIONS,
   Direction,
   HashMap,
   HashSet,
   intify,
   lineify,
   makeHash,
+  manhattanDistance,
   move,
   Position,
   readInput,
@@ -45,417 +47,113 @@ class OffsetQueue<T> {
 const numericKeyPad = SparseGridV2.fromString2("789\n456\n123\n.0A".trim());
 const directionalKeyPad = SparseGridV2.fromString2(".^A\n<v>".trim());
 
-type ButtonPress = "A" | "^" | "<" | "v" | ">";
+const numericInputs = new Map<string, Position>();
+const directionalInputs = new Map<string, Position>();
 
-interface RobotState {
-  buttonPresses: ButtonPress[];
-  position: Position;
-  grid: SparseGridV2<string>;
-  nextRobot?: RobotState;
+for (const [pos, input] of numericKeyPad.entries()) {
+  numericInputs.set(input, pos);
 }
 
-interface State {
-  buttonPresses: ButtonPress[];
-  robot: RobotState;
-  output: string;
+for (const [pos, input] of directionalKeyPad.entries()) {
+  directionalInputs.set(input, pos);
 }
 
-const BUTTON_PRESSES: ButtonPress[] = ["A", "^", "<", "v", ">"];
-
-const robotStateIsValid = (rs: RobotState | undefined) => {
-  if (!rs) return true;
-
-  const cur = rs.grid.get(rs.position);
-  if (!cur || cur === ".") {
-    return false;
-  }
-
-  return robotStateIsValid(rs.nextRobot);
+const keypads = {
+  numerical: { keypad: numericKeyPad, reverseMap: numericInputs },
+  directional: { keypad: directionalKeyPad, reverseMap: directionalInputs },
 };
 
-const robotPressButton = (
-  b: ButtonPress,
-  r: RobotState,
-): string | undefined => {
-  const cur = r.grid.get(r.position);
-  if (!cur || cur === ".") {
-    throw "robot in bad state";
-  }
-  r.buttonPresses.push(b);
+interface RobotSpec {
+  type: keyof typeof keypads;
+  currentSymbol: string;
+}
 
-  switch (b) {
-    case "A": {
-      if (r.nextRobot) {
-        const v = robotPressButton(
-          r.grid.get(r.position)! as ButtonPress,
-          r.nextRobot,
-        );
-        return v;
-      } else {
-        return r.grid.get(r.position)!;
-      }
-      break;
-    }
-    case "^": {
-      r.position = move(r.position, Direction.N);
-      break;
-    }
-    case "<": {
-      r.position = move(r.position, Direction.W);
-      break;
-    }
-    case "v": {
-      r.position = move(r.position, Direction.S);
-      break;
-    }
-    case ">": {
-      r.position = move(r.position, Direction.E);
-      break;
-    }
-  }
-};
-
-const pressButton = (b: ButtonPress, s: State) => {
-  s.buttonPresses.push(b);
-  let output: string | undefined;
-
-  switch (b) {
-    case "A": {
-      output = robotPressButton(b, s.robot);
-      break;
-    }
-    case "^": {
-      output = robotPressButton(b, s.robot);
-      break;
-    }
-    case "<": {
-      output = robotPressButton(b, s.robot);
-      break;
-    }
-    case "v": {
-      output = robotPressButton(b, s.robot);
-      break;
-    }
-    case ">": {
-      output = robotPressButton(b, s.robot);
-      break;
-    }
-  }
-
-  if (output) {
-    s.output += output;
-  }
-};
-
-const cloneRobotState = (s: RobotState): RobotState => {
-  return {
-    buttonPresses: [...s.buttonPresses],
-    position: { ...s.position },
-    grid: s.grid,
-    nextRobot: s.nextRobot ? cloneRobotState(s.nextRobot) : undefined,
-  };
-};
-const cloneState = (s: State): State => {
-  return {
-    buttonPresses: [...s.buttonPresses],
-    robot: cloneRobotState(s.robot),
-    output: s.output,
-  };
-};
-
-const printRobotState = (s: RobotState) => {
-  console.log(`pos: ${JSON.stringify(s.position, undefined, 2)}`);
-  console.log(`buttonPresses (${s.buttonPresses.length}): ${s.buttonPresses}`);
-  if (s.nextRobot) {
-    console.log(`next:`);
-    printRobotState(s.nextRobot);
-  }
-};
-
-const printState = (s: State) => {
-  console.log("#############");
-  console.log("b", s.buttonPresses);
-  console.log("o", s.output);
-  printRobotState(s.robot);
-  console.log("#############");
-};
-
-const hashState = (s: State) => {
-  const values: Position[] = [];
-
-  let r: RobotState | undefined = s.robot;
-
-  while (r) {
-    values.push(r.position);
-    r = r.nextRobot;
-  }
-
-  return makeHash(...values, s.output);
-};
-
-const getStatePositions = (s: State) => {
-  const values: Position[] = [];
-
-  let r: RobotState | undefined = s.robot;
-
-  while (r) {
-    values.push(r.position);
-    r = r.nextRobot;
-  }
-
-  return values;
-};
-
-const stateEquals = (a: State, b: State) => {
-  const valuesA = getStatePositions(a);
-  const valuesB = getStatePositions(b);
-
-  for (let i = 0; i < valuesA.length; i++) {
-    const vA = valuesA[i];
-    const vB = valuesB[i];
-
-    if (vA.x !== vB.x || vA.y !== vB.y) {
-      return false;
-    }
-  }
-
-  return true;
-};
+type Chain = RobotSpec[];
 
 export const part1 = (useTestData: boolean = false): number => {
-  const input = readInput(useTestData);
-  const codes = lineify(input);
+  return 0;
+};
 
-  const numericInputs = new Map<string, Position>();
-  const directionalInputs = new Map<string, Position>();
+const DIRECTION_TO_KEY: Record<Direction, "^" | "<" | "v" | ">"> = {
+  [Direction.W]: "<",
+  [Direction.E]: ">",
+  [Direction.S]: "v",
+  [Direction.N]: "^",
+  [Direction.SW]: "v",
+  [Direction.SE]: "v",
+  [Direction.NW]: "^",
+  [Direction.NE]: "^",
+};
 
-  for (const [pos, input] of numericKeyPad.entries()) {
-    numericInputs.set(input, pos);
+const pathCache = new HashMap<
+  { from: string; to: string; keypadType: keyof typeof keypads },
+  string[][]
+>();
+export const getPaths = (
+  from: string,
+  to: string,
+  keypadType: keyof typeof keypads,
+) => {
+  const cacheKey = { from, to, keypadType };
+  if (pathCache.has(cacheKey)) {
+    return pathCache.get(cacheKey);
   }
 
-  for (const [pos, input] of directionalKeyPad.entries()) {
-    directionalInputs.set(input, pos);
-  }
+  const { keypad, reverseMap } = keypads[keypadType];
+  const startPos = reverseMap.get(from)!;
+  const endPos = reverseMap.get(to)!;
 
-  const initialState: State = {
-    buttonPresses: [],
-    robot: {
-      buttonPresses: [],
-      position: { ...directionalInputs.get("A")! },
-      grid: directionalKeyPad,
-      nextRobot: {
-        buttonPresses: [],
-        position: { ...directionalInputs.get("A")! },
-        grid: directionalKeyPad,
-        nextRobot: {
-          buttonPresses: [],
-          position: { ...numericInputs.get("A")! },
-          grid: numericKeyPad,
-        },
-      },
-    },
-    output: "",
-  };
+  const pathLen = manhattanDistance(startPos, endPos);
+  const initialPath = { currentPos: startPos, path: [] as string[] };
+  const queue = new OffsetQueue<typeof initialPath>();
 
-  let result: [string, string[]][] = [];
-  for (const code of codes) {
-    const seen = new HashSet(hashState, stateEquals);
-    const best = new Map<number, number>();
-    const queue = new OffsetQueue<State>();
-    queue.enqueue(initialState);
+  queue.enqueue(initialPath);
 
-    let count = 0;
-    while (queue.size() > 0) {
-      const state = queue.dequeue()!;
-      if (count++ % 10_000 === 0) {
-        console.log(`queue size: ${queue.size()}`);
-        console.log(`seen size: ${seen.size}`);
-        console.log(state.output);
-        console.log(state.buttonPresses.length);
-        // console.log(best);
-      }
+  const results: string[][] = [];
+  while (queue.size() > 0) {
+    const { currentPos, path } = queue.dequeue()!;
 
-      seen.add(state);
-      best.set(
-        state.buttonPresses.length,
-        Math.max(
-          best.get(state.buttonPresses.length) || 0,
-          state.output.length,
-        ),
-      );
+    if (path.length > pathLen) continue;
+    if (currentPos.x === endPos.x && currentPos.y === endPos.y) {
+      results.push(path);
+      continue;
+    }
 
-      if (state.output === code) {
-        result.push([code, state.buttonPresses]);
-        break;
-      }
+    for (const direction of CARDINAL_DIRECTIONS) {
+      const newPos = move(currentPos, direction);
+      const posValue = keypad.get(newPos);
+      if (posValue === undefined || posValue === ".") continue;
 
-      for (const bp of BUTTON_PRESSES) {
-        const clonedState = cloneState(state);
-        try {
-          pressButton(bp, clonedState);
-          if (seen.has(clonedState)) continue;
-
-          if (!robotStateIsValid(clonedState.robot)) {
-            seen.add(clonedState);
-            continue;
-          }
-
-          if (
-            (best.get(clonedState.buttonPresses.length) || 0) >
-            clonedState.output.length
-          ) {
-            seen.add(clonedState);
-            continue;
-          }
-
-          if (!code.startsWith(clonedState.output)) {
-            seen.add(clonedState);
-            continue;
-          }
-
-          queue.enqueue(clonedState);
-        } catch (e) {
-          continue;
-        }
-      }
+      queue.enqueue({
+        currentPos: newPos,
+        path: [...path, DIRECTION_TO_KEY[direction]],
+      });
     }
   }
 
-  console.log(numericInputs, directionalInputs);
-  console.log(result);
-  console.log(result[0][1].join(""));
-
-  let total = 0;
-  for (const [a, b] of result) {
-    const numericPart = parseInt(intify(a).join(""));
-    total += numericPart * b.length;
-  }
-
-  return total;
+  pathCache.set(cacheKey, results);
+  return results;
 };
 
 export const part2 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
   const codes = lineify(input);
 
-  const numericInputs = new Map<string, Position>();
-  const directionalInputs = new Map<string, Position>();
+  const specs: RobotSpec[] = [];
 
-  for (const [pos, input] of numericKeyPad.entries()) {
-    numericInputs.set(input, pos);
-  }
+  const calculatePressesNeeded = (chain: Chain, symbolsNeeded: string) => {
+    if (symbolsNeeded.length === 0) return 0;
 
-  for (const [pos, input] of directionalKeyPad.entries()) {
-    directionalInputs.set(input, pos);
-  }
-
-  const initialState: State = {
-    buttonPresses: [],
-    robot: {
-      buttonPresses: [],
-      position: { ...directionalInputs.get("A")! },
-      grid: directionalKeyPad,
-      nextRobot: {
-        buttonPresses: [],
-        position: { ...directionalInputs.get("A")! },
-        grid: directionalKeyPad,
-        nextRobot: {
-          buttonPresses: [],
-          position: { ...numericInputs.get("A")! },
-          grid: numericKeyPad,
-        },
-      },
-    },
-    output: "",
+    let bestCost = Infinity;
+    const currentSymbol = symbolsNeeded[0];
+    const currentRobot = chain[0];
   };
 
-  let result: [string, string[]][] = [];
-
-  for (const code of codes) {
-    let subResult: string[][] = [];
-    let lastState = initialState;
-
-    for (const subCode of code.split("")) {
-      const seen = new HashSet(hashState, stateEquals);
-      const best = new Map<number, number>();
-      const queue = new OffsetQueue<State>();
-      queue.enqueue(lastState);
-
-      let count = 0;
-      while (queue.size() > 0) {
-        const state = queue.dequeue()!;
-        if (count++ % 200_000 === 0) {
-          console.log(`queue size: ${queue.size()}`);
-          console.log(`seen size: ${seen.size}`);
-          console.log(`output: ${state.output}`);
-          console.log(`button len: ${state.buttonPresses.length}`);
-          console.log(`subCode: ${subCode}`);
-        }
-
-        seen.add(state);
-        best.set(
-          state.buttonPresses.length,
-          Math.max(
-            best.get(state.buttonPresses.length) || 0,
-            state.output.length,
-          ),
-        );
-
-        if (state.output === subCode) {
-          // console.log(state.output);
-          printState(state);
-          subResult.push(state.buttonPresses);
-          const nState = cloneState(state);
-          nState.buttonPresses = [];
-          nState.output = "";
-          lastState = nState;
-          break;
-        }
-
-        for (const bp of BUTTON_PRESSES) {
-          const clonedState = cloneState(state);
-          try {
-            pressButton(bp, clonedState);
-            if (seen.has(clonedState)) continue;
-
-            if (!robotStateIsValid(clonedState.robot)) {
-              seen.add(clonedState);
-              continue;
-            }
-
-            if (
-              (best.get(clonedState.buttonPresses.length) || 0) >
-              clonedState.output.length
-            ) {
-              seen.add(clonedState);
-              continue;
-            }
-
-            if (!subCode.startsWith(clonedState.output)) {
-              seen.add(clonedState);
-              continue;
-            }
-
-            queue.enqueue(clonedState);
-          } catch (e) {
-            continue;
-          }
-        }
-      }
+  for (const code of codes.slice(1)) {
+    for (const character of code.split("").slice(1)) {
+      //
     }
-
-    // console.log({ subResult });
-    result.push([code, subResult.flat()]);
   }
 
-  console.log(result);
-  console.log(result[0][1].join(""));
-
-  let total = 0;
-  for (const [a, b] of result) {
-    const numericPart = parseInt(intify(a).join(""));
-    total += numericPart * b.length;
-  }
-
-  return total;
+  return 0;
 };

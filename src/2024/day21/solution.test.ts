@@ -1,4 +1,4 @@
-import { part1, part2 } from "./solution";
+import { part1, part2 } from "./solution2";
 
 describe("2024 - day 21", () => {
   it("solves part 1", () => {
