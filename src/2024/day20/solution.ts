@@ -12,6 +12,7 @@ import {
   PriorityQueue,
   readInput,
   SparseGrid,
+  SparseGridV2,
   StringifiedSet,
 } from "~utils";
 
@@ -86,7 +87,7 @@ export const part1 = (useTestData: boolean = false): number => {
 
 export const part2 = (useTestData: boolean = false): number => {
   const input = readInput(useTestData);
-  const grid = SparseGrid.fromString2(input);
+  const grid = SparseGridV2.fromString2(input);
 
   const dist = new HashMap<Position, number>(
     (p) => p.x * 1000 + p.y,
@@ -101,8 +102,7 @@ export const part2 = (useTestData: boolean = false): number => {
     (a, b) => dist.get(a)! < dist.get(b)!,
   );
 
-  const possibleVisits = grid
-    .entries()
+  const possibleVisits = [...grid.entries()]
     .filter(([a, b]) => b !== "#")
     .map(([a, b]) => a);
 
@@ -131,7 +131,7 @@ export const part2 = (useTestData: boolean = false): number => {
     visited.add(current);
   }
 
-  let cheats: number[] = [];
+  let cheats = 0;
   let count = 0;
   for (const [p, v] of grid.entries()) {
     if (v === "#") continue;
@@ -143,17 +143,17 @@ export const part2 = (useTestData: boolean = false): number => {
       if (cheatDistance > 20) continue;
       const nDist = dist.get(endP)! + cheatDistance;
       const oDist = dist.get(p)!;
-      if (nDist < oDist && oDist - nDist >= 50) {
-        cheats.push(oDist - nDist);
+      if (nDist < oDist && oDist - nDist >= 100) {
+        cheats++;
       }
     }
   }
-  const c = new Counter();
-  cheats.forEach((x) => {
-    c.add(x);
-  });
+  // const c = new Counter();
+  // cheats.forEach((x) => {
+  //   c.add(x);
+  // });
 
-  console.log(c);
+  // console.log(c);
 
-  return cheats.length;
+  return cheats;
 };
