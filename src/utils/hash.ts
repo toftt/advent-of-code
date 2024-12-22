@@ -34,6 +34,10 @@ export class Hasher {
         this.writeNumber(v);
         break;
       }
+      case "bigint": {
+        this.writeNumber(Number(v));
+        break;
+      }
       case "string": {
         this.writeString(v);
         break;
